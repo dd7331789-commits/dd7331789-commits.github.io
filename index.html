@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khoa CNTT - Đại học Đại Nam</title>
+    <style>/* 
+ * CSS Styles for Khoa CNTT Website
+ * Version: Enhanced for superior aesthetics (elegant typography, fluid animations, thematic gradients), 
+ * compactness (optimized selectors, media queries), and detail (enhanced accessibility, subtle micro-interactions, 
+ * additional breakpoints for seamless responsiveness across devices).
+ */
+
+/* CSS Variables: Expanded for more customization, including fonts and spacings */
+:root {
+    --primary-color: #007bff; /* Vibrant blue for energy and tech theme */
+    --secondary-color: #00c6ff; /* Lighter cyan for accents and gradients */
+    --accent-color: #ff6b6b; /* Warm coral for highlights and calls-to-action */
+    --bg-light: #f8f9fa; /* Softer light background for readability */
+    --bg-dark: #343a40; /* Dark for footer and contrasts */
+    --text-dark: #212529; /* Deep gray for text */
+    --text-light: #ffffff; /* Pure white for light text */
+    --shadow-soft: 0 4px 15px rgba(0, 0, 0, 0.08); /* Subtle, modern shadow */
+    --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15); /* Deeper hover for depth */
+    --border-radius: 12px; /* Slightly larger for a softer, modern feel */
+    --font-base: 1rem; /* Base font size */
+    --transition-fast: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smooth, bouncy transitions */
+    --spacing-small: 1rem; /* Consistent spacing units */
+    --spacing-medium: 2rem;
+    --spacing-large: 4rem;
+}
+
+/* Reset and Global Styles: Improved for better cross-browser consistency */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    line-height: 1.7;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-size: var(--font-base);
+    scroll-behavior: smooth; /* Smooth scrolling for anchors */
+}
+
+/* Header: Refined with parallax-like background, centered content, and subtle glow */
+header {
+    background: linear-gradient(rgba(0, 123, 255, 0.7), rgba(0, 198, 255, 0.7)), 
+                url('https://img.freepik.com/free-vector/background-realistic-abstract-technology-particle_23-2148431735.jpg?semt=ais_hybrid') center/cover no-repeat fixed; /* Parallax effect */
+    color: var(--text-light);
+    padding: var(--spacing-large) var(--spacing-small);
+    text-align: center;
+    border-bottom: 8px solid var(--secondary-color);
+    position: relative;
+    overflow: hidden;
+}
+
+header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.2), transparent);
+    animation: glow 5s infinite alternate; /* Subtle glowing animation */
+}
+
+@keyframes glow {
+    0% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+header h1 {
+    font-size: 2.8em;
+    margin-top: var(--spacing-small);
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+    letter-spacing: 1px; /* Better spacing for readability */
+}
+
+.logo {
+    max-width: 160px;
+    border-radius: 50%;
+    box-shadow: var(--shadow-soft);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.logo:hover {
+    transform: scale(1.1) rotate(5deg); /* Playful hover with scale and tilt */
+    box-shadow: var(--shadow-hover);
+}
+
+/* Navigation: Sticky nav for better UX, with glassmorphism effect */
+nav {
+    background-color: rgba(0, 123, 255, 0.9); /* Semi-transparent for glass effect */
+    backdrop-filter: blur(10px); /* Modern glassmorphism */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: var(--spacing-small) 0;
+}
+
+nav ul li {
+    position: relative;
+    margin: 0 var(--spacing-small);
+}
+
+nav ul li a {
+    color: var(--text-light);
+    text-decoration: none;
+    padding: 12px 24px;
+    display: block;
+    transition: background var(--transition-fast), transform var(--transition-fast), color var(--transition-fast);
+    border-radius: var(--border-radius);
+}
+
+nav ul li a:hover,
+nav ul li a:focus {
+    background-color: var(--secondary-color);
+    color: var(--text-dark);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+    outline: none;
+}
+
+/* Dropdown: Fade-in with scale, arrow indicator */
+nav ul li ul {
+    display: none;
+    position: absolute;
+    background-color: var(--primary-color);
+    min-width: 180px;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    box-shadow: var(--shadow-soft);
+    border-radius: var(--border-radius);
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+nav ul li:hover > ul,
+nav ul li:focus-within > ul {
+    display: block;
+    opacity: 1;
+    transform: scale(1);
+}
+
+nav ul li ul::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    border: 5px solid transparent;
+    border-bottom-color: var(--primary-color); /* Arrow for dropdown */
+}
+
+nav ul li ul li a {
+    padding: 10px 20px;
+    border-radius: 0;
+}
+
+/* Main Sections: Enhanced with entrance animations and section dividers */
+.page {
+    display: none;
+    padding: var(--spacing-large) var(--spacing-medium);
+    background-color: var(--text-light);
+    margin: var(--spacing-medium) 0;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-soft);
+    animation: slideUp 0.6s ease-out; /* Slide-up entrance */
+    position: relative;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.page::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--secondary-color), transparent); /* Subtle divider */
+}
+
+#trang-chu:target,
+#gioi-thieu:target,
+#tin-tuc:target,
+#lien-he:target {
+    display: block;
+}
+
+#trang-chu {
+    display: block; /* Default visible */
+}
+
+/* Hero Section: Thêm ảnh nền công nghệ hiện đại, overlay tối để chữ nổi bật */
+.hero-section {
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    padding: var(--spacing-large) var(--spacing-medium);
+    color: var(--text-light);
+    background: 
+        linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), /* Lớp tối để chữ dễ đọc */
+        url('https://img.freepik.com/free-vector/futuristic-technological-wallpaper_79603-1092.jpg?semt=ais_hybrid') center/cover no-repeat;
+    border-radius: var(--border-radius);
+    margin-bottom: var(--spacing-large);
+    box-shadow: var(--shadow-soft);
+    animation: fadeIn 1.2s ease-out;
+}
+
+/* Đảm bảo nội dung nằm trên ảnh nền */
+.hero-section h2,
+.hero-section p,
+.hero-section .btn {
+    position: relative;
+    z-index: 2;
+}
+
+/* Hiệu ứng parallax nhẹ khi cuộn (nếu dùng JS) hoặc giữ fixed */
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: inherit;
+    background-attachment: fixed; /* Parallax effect */
+    filter: blur(1px); /* Tạo chiều sâu */
+    z-index: 1;
+    transform: scale(1.05);
+}
+
+/* Tinh chỉnh chữ cho nổi bật trên nền tối */
+.hero-section h2 {
+    font-size: 2.6em;
+    font-weight: 700;
+    margin-bottom: var(--spacing-small);
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+    animation: slideDown 0.8s ease-out;
+}
+
+.hero-section p {
+    font-size: 1.25em;
+    max-width: 800px;
+    margin: 0 auto var(--spacing-medium);
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+    animation: fadeInUp 1s ease-out 0.3s both;
+}
+
+/* Nút CTA nổi bật hơn */
+.hero-section .btn {
+    background: linear-gradient(135deg, var(--accent-color), #ff8e8e);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 6px 15px rgba(255, 107, 107, 0.4);
+    animation: fadeInUp 1s ease-out 0.6s both;
+}
+
+.hero-section .btn:hover {
+    background: linear-gradient(135deg, #ff8e8e, var(--accent-color));
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 10px 20px rgba(255, 107, 107, 0.5);
+}
+
+/* Buttons: Enhanced with ripple effect on click (via pseudo-element) */
+.btn {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: var(--text-light);
+    padding: 14px 32px;
+    text-decoration: none;
+    border-radius: 50px; /* More rounded for modern look */
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.6s;
+    border-radius: 50%;
+}
+
+.btn:active::before {
+    transform: translate(-50%, -50%) scale(1); /* Ripple on click */
+    transition: transform 0s;
+}
+
+.btn:hover,
+.btn:focus {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color)); /* Reverse gradient on hover */
+    outline: none;
+}
+
+/* Table: Zebra striping, responsive scroll on mobile, hover rows */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: var(--spacing-medium) 0;
+    box-shadow: var(--shadow-soft);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+table th, table td {
+    border: 1px solid rgba(0, 123, 255, 0.1);
+    padding: 14px;
+    text-align: left;
+}
+
+table th {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    font-weight: 600;
+}
+
+table tr:nth-child(even) {
+    background-color: rgba(0, 198, 255, 0.05); /* Light tint for stripes */
+}
+
+table tr:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+    transition: background var(--transition-fast);
+}
+
+/* Card Grid: Masonry-like grid, with flip or zoom effects */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-medium);
+}
+
+.card {
+    background-color: var(--text-light);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-small);
+    box-shadow: var(--shadow-soft);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    overflow: hidden;
+    position: relative;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(to right, var(--primary-color), var(--secondary-color)); /* Top accent bar */
+}
+
+.card:hover,
+.card:focus-within {
+    transform: perspective(600px) rotateY(5deg); /* 3D tilt effect */
+    box-shadow: var(--shadow-hover);
+}
+
+.card img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--border-radius);
+    transition: transform var(--transition-fast);
+}
+
+.card:hover img,
+.card:focus-within img {
+    transform: scale(1.08);
+}
+
+.card h3 {
+    font-size: 1.5em;
+    margin: var(--spacing-small) 0;
+    color: var(--primary-color);
+}
+
+/* Form: Modern inputs with floating labels, validation styles */
+form {
+    max-width: 700px;
+    margin: 0 auto;
+    display: grid;
+    gap: var(--spacing-small);
+}
+
+form label {
+    display: block;
+    margin: var(--spacing-small) 0 0.5rem;
+    font-weight: 500;
+    color: var(--primary-color);
+}
+
+form input,
+form textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid rgba(0, 123, 255, 0.2);
+    border-radius: 8px;
+    transition: border var(--transition-fast), box-shadow var(--transition-fast);
+    background-color: var(--bg-light);
+}
+
+form input:focus,
+form textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.1);
+    outline: none;
+}
+
+form input:invalid,
+form textarea:invalid {
+    border-color: var(--accent-color); /* Red for errors */
+}
+
+/* Footer: Expanded with wave effect or icons, centered social links */
+footer {
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    text-align: center;
+    padding: var(--spacing-medium);
+    border-top: 8px solid var(--primary-color);
+    position: relative;
+    overflow: hidden;
+}
+
+footer::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background: wave-gradient(var(--secondary-color)); /* Hypothetical wave, or use SVG if needed */
+    opacity: 0.2;
+}
+
+footer a {
+    color: var(--secondary-color);
+    text-decoration: none;
+    margin: 0 12px;
+    transition: color var(--transition-fast), transform var(--transition-fast);
+}
+
+footer a:hover {
+    color: var(--accent-color);
+    transform: scale(1.2);
+}
+
+/* Responsive Design: Refined breakpoints for desktops, tablets, mobiles */
+@media (max-width: 1200px) {
+    body {
+        max-width: 100%;
+        padding: 0 var(--spacing-small);
+    }
+}
+
+@media (max-width: 992px) {
+    header h1 {
+        font-size: 2.4em;
+    }
+
+    .card-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+        padding: var(--spacing-small) 0;
+    }
+
+    nav ul li {
+        margin: var(--spacing-small) 0;
+    }
+
+    .page {
+        padding: var(--spacing-medium) var(--spacing-small);
+    }
+
+    table {
+        display: block;
+        overflow-x: auto; /* Scrollable tables on mobile */
+    }
+
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        padding: var(--spacing-medium) var(--spacing-small);
+    }
+
+    header h1 {
+        font-size: 2em;
+    }
+
+    .btn {
+        padding: 12px 24px;
+    }
+
+    form input,
+    form textarea {
+        font-size: 1rem; /* Larger touch targets */
+    }
+}
+
+/* Thêm keyframes (nếu chưa có trong CSS chính) */
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}</style>
+</head>
+<body>
+
+    <header>
+        <img src="img/images.png" alt="Logo Khoa CNTT" class="logo">
+        <h1>Khoa Công nghệ Thông tin - Đại học Đại Nam</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#trang-chu">Trang chủ</a></li>
+            <li><a href="#gioi-thieu">Giới thiệu</a></li>
+            <li><a href="#dao-tao">Đào tạo</a></li>
+            <li><a href="#sinh-vien">Sinh viên</a></li>
+            <li><a href="#tin-tuc">Tin tức</a></li>
+            <li><a href="#lien-he">Liên hệ</a></li>
+        </ul>
+    </nav>
+
+    <main>
+
+        <!-- TRANG CHỦ -->
+        <section id="trang-chu" class="hero-section">
+            <h2>Chào mừng đến với Khoa CNTT - Đại học Đại Nam</h2>
+            <p>Khám phá môi trường học tập năng động, sáng tạo và đậm chất công nghệ, nơi sinh viên được truyền cảm hứng để đổi mới và sáng tạo không ngừng.</p>
+            <a href="#gioi-thieu" class="btn">Khám phá ngay</a>
+        </section>
+
+        <!-- GIỚI THIỆU -->
+        <section id="gioi-thieu" class="page">
+            <h2>Giới thiệu về Khoa</h2>
+            <p>Khoa Công nghệ Thông tin được thành lập năm 2005, là một trong những khoa mũi nhọn của Đại học Đại Nam. Chúng tôi tự hào đào tạo nguồn nhân lực vững kiến thức, giỏi kỹ năng và sáng tạo trong tư duy.</p>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <img src="img/13uk0zic1pbz9gv9mstw20240702085945_thump.jpg" alt="Giảng viên CNTT">
+                    <h3>Đội ngũ giảng viên</h3>
+                    <p>Hơn 50 giảng viên có trình độ cao, bao gồm Tiến sĩ, Thạc sĩ trong và ngoài nước, luôn nhiệt huyết đồng hành cùng sinh viên.</p>
+                </div>
+                <div class="card">
+                    <img src="img/images (1).jfif" alt="Phòng Lab CNTT">
+                    <h3>Cơ sở vật chất</h3>
+                    <p>Phòng máy tính và phòng lab đạt chuẩn quốc tế, trang bị máy cấu hình mạnh, phục vụ tốt các học phần thực hành và nghiên cứu khoa học.</p>
+                </div>
+                <div class="card">
+                    <img src="img/z6208075553851_ca383fb78a7aa55e9ae30ed32fc9bca9-1024x684.jpg" alt="Hợp tác doanh nghiệp">
+                    <h3>Hợp tác doanh nghiệp</h3>
+                    <p>Khoa hợp tác với các công ty công nghệ lớn như FPT, VNPT, Viettel, giúp sinh viên thực tập và có cơ hội việc làm hấp dẫn sau khi ra trường.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ĐÀO TẠO -->
+        <section id="dao-tao" class="page">
+            <h2>Chương trình Đào tạo</h2>
+            <p>Đào tạo bám sát nhu cầu thực tiễn, hướng tới mô hình “Học đi đôi với hành” – giúp sinh viên có thể làm việc ngay sau khi tốt nghiệp.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Chuyên ngành</th>
+                        <th>Thời gian</th>
+                        <th>Định hướng nghề nghiệp</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Kỹ thuật phần mềm</td>
+                        <td>4 năm</td>
+                        <td>Lập trình viên, kỹ sư DevOps, tester, chuyên viên quản lý dự án CNTT.</td>
+                    </tr>
+                    <tr>
+                        <td>Trí tuệ nhân tạo</td>
+                        <td>4 năm</td>
+                        <td>Chuyên viên AI, nhà khoa học dữ liệu, kỹ sư học máy, nhà nghiên cứu AI.</td>
+                    </tr>
+                    <tr>
+                        <td>An toàn thông tin</td>
+                        <td>4 năm</td>
+                        <td>Chuyên viên bảo mật hệ thống, chuyên viên phân tích và xử lý tấn công mạng.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- SINH VIÊN -->
+        <section id="sinh-vien" class="page">
+            <h2>Đời sống Sinh viên</h2>
+            <p>Không chỉ học tập, sinh viên CNTT còn được tham gia các câu lạc bộ, dự án thực tế và các hoạt động ngoại khóa đầy năng lượng.</p>
+
+            <div class="card-grid">
+                <div class="card">
+                    <img src="img/clbcode.jpg" alt="Câu lạc bộ lập trình">
+                    <h3>Câu lạc bộ Lập trình DNU</h3>
+                    <p>Nơi sinh viên cùng nhau học hỏi, chia sẻ và phát triển các dự án công nghệ thực tế, từng đạt nhiều giải thưởng cấp quốc gia.</p>
+                </div>
+                <div class="card">
+                    <img src="img/hocbong.jpg" alt="Học bổng sinh viên">
+                    <h3>Học bổng & Khuyến học</h3>
+                    <p>Hàng trăm suất học bổng được trao mỗi năm cho sinh viên có thành tích học tập xuất sắc và hoạt động tích cực.</p>
+                </div>
+                <div class="card">
+                    <img src="img/vieclam.jpg" alt="Việc làm CNTT">
+                    <h3>Cơ hội nghề nghiệp</h3>
+                    <p>Trên 95% sinh viên có việc làm sau 6 tháng tốt nghiệp. Khoa luôn đồng hành cùng sinh viên trong định hướng và kết nối doanh nghiệp.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- TIN TỨC -->
+        <section id="tin-tuc" class="page">
+            <h2>Tin tức nổi bật</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <img src="img/image.jpg" alt=" thảo AI 2025">
+                    <h3>Hội thảo AI 2025</h3>
+                    <p>Khoa tổ chức hội thảo về Trí tuệ nhân tạo quy mô toàn quốc với sự góp mặt của chuyên gia đến từ Google, VinAI, và Viettel.</p>
+                    <small>Ngày đăng: 01/11/2025</small>
+                </div>
+                <div class="card">
+                    <img src="img/images (2).jfif" alt="Chương trình trao đổi sinh viên">
+                    <h3>Trao đổi sinh viên quốc tế</h3>
+                    <p>10 sinh viên xuất sắc được chọn tham gia chương trình trao đổi học tập tại Hàn Quốc và Nhật Bản năm học 2025–2026.</p>
+                    <small>Ngày đăng: 25/10/2025</small>
+                </div>
+                <div class="card">
+                    <img src="img/images (3).jfif" alt="Dự án khởi nghiệp CNTT">
+                    <h3>Dự án khởi nghiệp sinh viên</h3>
+                    <p>Nhóm sinh viên DNU Tech Startup giành quán quân cuộc thi “Ý tưởng Sáng tạo Trẻ 2025” với ứng dụng học lập trình thông minh.</p>
+                    <small>Ngày đăng: 18/10/2025</small>
+                </div>
+            </div>
+        </section>
+
+        <!-- LIÊN HỆ -->
+        <section id="lien-he" class="page">
+            <h2>Liên hệ với chúng tôi</h2>
+            <p>Nếu bạn có thắc mắc hoặc muốn tìm hiểu thêm về chương trình học, hãy liên hệ với chúng tôi qua biểu mẫu dưới đây:</p>
+            <form>
+                <label for="hoten">Họ và tên:</label>
+                <input type="text" id="hoten" name="hoten" placeholder="Nhập họ tên của bạn" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Nhập email liên hệ" required>
+
+                <label for="chude">Chủ đề:</label>
+                <input type="text" id="chude" name="chude" placeholder="Chủ đề liên hệ" required>
+
+                <label for="noidung">Nội dung:</label>
+                <textarea id="noidung" name="noidung" rows="6" placeholder="Nội dung bạn muốn gửi đến khoa" required></textarea>
+
+                <button type="submit" class="btn">Gửi thông tin</button>
+            </form>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Khoa CNTT - Đại học Đại Nam. All rights reserved.</p>
+        <p>Theo dõi chúng tôi: 
+            <a href="#" style="color: #fff;">Facebook</a> | 
+            <a href="#" style="color: #fff;">YouTube</a> | 
+            <a href="#" style="color: #fff;">LinkedIn</a>
+        </p>
+    </footer>
+
+</body>
+</html>
