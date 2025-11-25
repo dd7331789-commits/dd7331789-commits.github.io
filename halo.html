@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mini E-commerce (AWS-ready) - Demo HTML</title>
+  <style>
+    /* ---------- Basic reset & layout ---------- */
+    :root{
+      --bg: #0f1724;
+      --card: #0b1220;
+      --muted: #94a3b8;
+      --accent: #06b6d4;
+      --accent-2: #7c3aed;
+      --glass: rgba(255,255,255,0.03);
+      --success: #16a34a;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,#071028 0%, #071022 60%);
+      color:#e6eef6;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:24px;
+    }
+    .container{max-width:1100px;margin:0 auto;}
+    header{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:16px;margin-bottom:18px;
+    }
+    header h1{font-size:20px;margin:0}
+    header .controls{display:flex;gap:8px;align-items:center}
+    button, input, select, textarea{font:inherit}
+    button{
+      background:linear-gradient(90deg,var(--accent),var(--accent-2));
+      border:none;color:white;padding:8px 12px;border-radius:10px;cursor:pointer;
+      box-shadow:0 6px 18px rgba(124,58,237,0.12);
+    }
+    .ghost{background:transparent;border:1px solid rgba(255,255,255,0.06)}
+    .muted{color:var(--muted);font-size:13px}
+
+    /* ---------- grid ---------- */
+    .layout{display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start}
+    .card{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 6px 20px rgba(2,6,23,0.6)}
+    .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+
+    /* ---------- product card ---------- */
+    .prod{
+      display:flex;flex-direction:column;border-radius:10px;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);
+      transition:transform .14s ease,box-shadow .14s ease;
+    }
+    .prod:hover{transform:translateY(-6px);box-shadow:0 10px 30px rgba(2,6,23,0.8)}
+    .prod .img{height:160px;background:linear-gradient(180deg,#0a1220,#041223);display:flex;align-items:center;justify-content:center;color:var(--muted)}
+    .prod .body{padding:12px;display:flex;flex-direction:column;gap:8px}
+    .price{font-weight:700}
+    .small{font-size:13px;color:var(--muted)}
+
+    /* ---------- sidebar ---------- */
+    .sidebar .section{margin-bottom:14px}
+    .cart-list{display:flex;flex-direction:column;gap:10px}
+    .cart-item{display:flex;gap:10px;align-items:center}
+    .cart-item img{width:56px;height:46px;object-fit:cover;border-radius:6px;background:#061021}
+    .qty{display:flex;align-items:center;gap:6px}
+    .qty button{padding:6px 8px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+
+    /* ---------- forms ---------- */
+    form .row{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+    input, textarea{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px;border-radius:8px;color:inherit}
+    textarea{min-height:80px}
+
+    /* ---------- small helpers ---------- */
+    .center{text-align:center}
+    .link-like{background:transparent;border:none;color:var(--accent);cursor:pointer;padding:4px}
+    .note{font-size:13px;color:var(--muted)}
+    .badge{background:rgba(255,255,255,0.04);padding:4px 8px;border-radius:999px;font-size:12px}
+    footer{margin-top:22px;color:var(--muted);font-size:13px;text-align:center}
+    @media (max-width:980px){
+      .layout{grid-template-columns:1fr}
+      .sidebar{order:2}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>ShopMini — Demo E-commerce (HTML)</h1>
+        <div class="muted">Frontend tĩnh: upload lên S3 → CloudFront. Cập nhật <code>API_BASE</code> bên dưới.</div>
+      </div>
+      <div class="controls">
+        <div class="badge" id="userBadge">Khách</div>
+        <button id="btn-toggleMock" class="ghost">Bật mock</button>
+        <button id="btn-openAdmin" class="ghost">Admin: Tạo SP</button>
+        <button id="btn-refresh">Làm mới</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <!-- LEFT: product list & product detail -->
+      <div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <div>
+              <strong>Danh sách sản phẩm</strong>
+              <div class="muted small">Hiển thị các sản phẩm có sẵn</div>
+            </div>
+            <div class="muted small" id="productsCount">0 sản phẩm</div>
+          </div>
+
+          <div id="products" class="products-grid">
+            <!-- product cards injected here -->
+          </div>
+
+        </div>
+
+        <div class="card" style="margin-top:14px" id="detailCard" hidden>
+          <div style="display:flex;gap:12px">
+            <div style="flex:0 0 280px">
+              <div id="detailImage" class="img" style="height:240px;border-radius:8px"></div>
+            </div>
+            <div style="flex:1">
+              <h2 id="detailName">Tên sản phẩm</h2>
+              <div class="muted small" id="detailDesc">Mô tả</div>
+              <div style="margin-top:12px">
+                <div class="price" id="detailPrice">0₫</div>
+                <div style="margin-top:8px">
+                  Số lượng: <input id="detailQty" type="number" min="1" value="1" style="width:80px;padding:6px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.06)" />
+                </div>
+                <div style="margin-top:12px">
+                  <button id="btn-addCart">Thêm vào giỏ</button>
+                  <button id="btn-back" class="ghost">Quay lại</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: sidebar cart & checkout -->
+      <aside class="sidebar">
+        <div class="card">
+          <div class="section">
+            <strong>Giỏ hàng</strong>
+            <div class="muted small">Sản phẩm bạn chọn</div>
+          </div>
+
+          <div class="cart-list" id="cartList">
+            <div class="muted small">Giỏ hàng trống</div>
+          </div>
+
+          <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div class="muted small">Tổng</div>
+              <div style="font-weight:700" id="cartTotal">0₫</div>
+            </div>
+            <div>
+              <button id="btn-checkout">Thanh toán</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <div class="section">
+            <strong>Thanh toán / Đặt hàng</strong>
+            <div class="muted small">Form đơn giản (gửi tới API /orders)</div>
+          </div>
+          <form id="checkoutForm">
+            <div class="row">
+              <label class="small">Họ tên</label>
+              <input id="fieldName" placeholder="Nguyễn Văn A" required />
+            </div>
+            <div class="row">
+              <label class="small">Email</label>
+              <input id="fieldEmail" placeholder="email@domain.com" type="email" required />
+            </div>
+            <div class="row">
+              <label class="small">Địa chỉ giao hàng</label>
+              <textarea id="fieldAddress" placeholder="Địa chỉ ..." required></textarea>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button type="submit">Gửi đơn</button>
+              <button type="button" id="btn-clearCart" class="ghost">Xóa giỏ</button>
+            </div>
+            <div class="note" id="checkoutNote" style="margin-top:8px"></div>
+          </form>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <div class="section">
+            <strong>Thông tin deploy</strong>
+            <div class="muted small">Điền API_BASE dưới đây để gọi backend (ví dụ: https://abcd.execute-api.us-east-1.amazonaws.com/Prod)</div>
+            <input id="apiBaseInput" placeholder="API_BASE (ví dụ https://.../Prod)" />
+            <div style="margin-top:8px;display:flex;gap:8px">
+              <button id="btn-saveApi">Lưu</button>
+              <button id="btn-useMock" class="ghost">Dùng mock (local)</button>
+            </div>
+            <div class="muted small" style="margin-top:8px">Lưu ý: admin POST /admin/products và /orders đều là ví dụ — backend cần implement tương ứng</div>
+          </div>
+        </div>
+
+      </aside>
+    </main>
+
+    <footer>
+      <div class="muted">Mẫu HTML đơn giản — hỗ trợ mock & gọi API. Deployment: upload file lên S3 bucket + enable static website hosting.</div>
+    </footer>
+  </div>
+
+  <!-- ---------- Script: frontend logic ---------- -->
+  <script>
+    /**
+     * Mini E-commerce frontend (single-file)
+     * - Replace API_BASE with your API Gateway endpoint /Prod (no trailing slash)
+     * - Endpoints used:
+     *    GET  ${API_BASE}/products
+     *    GET  ${API_BASE}/products/{id}
+     *    POST ${API_BASE}/admin/products   (for admin create)
+     *    POST ${API_BASE}/orders
+     *
+     * If no API set, use mock mode (in-browser demo).
+     */
+
+    // ---------- CONFIG ----------
+    let API_BASE = ''; // <-- bạn có thể nhập URL tại UI "API_BASE"
+    let USE_MOCK = true;
+    const STORAGE_KEY = 'shopmini_cart_v1';
+
+    // ---------- mock data (only for demo) ----------
+    let mockProducts = [
+      { pk: 'prod_1', name: 'Áo thun local', price: 199000, description: 'Áo thun cotton mịn, size S/M/L', images: [] },
+      { pk: 'prod_2', name: 'Mũ lưỡi trai', price: 99000, description: 'Mũ unisex, logo thêu', images: [] },
+      { pk: 'prod_3', name: 'Túi tote', price: 125000, description: 'Túi vải eco-friendly', images: [] },
+      { pk: 'prod_4', name: 'Áo hoodie', price: 399000, description: 'Hoodie dày ấm', images: [] }
+    ];
+
+    // ---------- state ----------
+    let products = [];
+    let cart = loadCart();
+    let selectedProduct = null;
+
+    // ---------- helpers ----------
+    function formatVND(n){ return n.toLocaleString('vi-VN') + '₫'; }
+    function byId(id){ return document.getElementById(id); }
+
+    // ---------- load/save cart ----------
+    function loadCart(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(!raw) return {};
+        return JSON.parse(raw);
+      }catch(e){ return {}; }
+    }
+    function saveCart(){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
+      renderCart();
+    }
+
+    // ---------- render products ----------
+    function renderProducts(){
+      const el = byId('products');
+      el.innerHTML = '';
+      products.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'prod';
+        card.innerHTML = `
+          <div class="img" data-id="${p.pk}">
+            ${p.images && p.images.length ? `<img src="${p.images[0]}" style="max-width:100%;max-height:100%;object-fit:cover" />` : '<div style="text-align:center"><div class="muted">Không có ảnh</div></div>'}
+          </div>
+          <div class="body">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div style="max-width:70%"><strong>${escapeHtml(p.name)}</strong></div>
+              <div class="price">${formatVND(p.price || 0)}</div>
+            </div>
+            <div class="small">${escapeHtml(p.description || '')}</div>
+            <div style="margin-top:8px;display:flex;gap:8px">
+              <button data-action="view" data-id="${p.pk}">Xem</button>
+              <button data-action="add" data-id="${p.pk}" class="ghost">Thêm</button>
+            </div>
+          </div>
+        `;
+        el.appendChild(card);
+      });
+      byId('productsCount').textContent = products.length + ' sản phẩm';
+      // attach events
+      el.querySelectorAll('[data-action="view"]').forEach(b => b.addEventListener('click', e => openDetail(e.target.dataset.id)));
+      el.querySelectorAll('[data-action="add"]').forEach(b => b.addEventListener('click', e => addToCart(e.target.dataset.id,1)));
+      el.querySelectorAll('.img').forEach(img => img.addEventListener('click', e => openDetail(img.dataset.id)));
+    }
+
+    // ---------- render cart ----------
+    function renderCart(){
+      const el = byId('cartList');
+      el.innerHTML = '';
+      const ids = Object.keys(cart);
+      if(ids.length === 0){
+        el.innerHTML = '<div class="muted small">Giỏ hàng trống</div>';
+        byId('cartTotal').textContent = formatVND(0);
+        return;
+      }
+      let total = 0;
+      ids.forEach(id => {
+        const qty = cart[id];
+        const p = products.find(x => x.pk === id) || mockProducts.find(x => x.pk === id) || { name: id, price: 0 };
+        const sub = (p.price || 0) * qty;
+        total += sub;
+        const item = document.createElement('div');
+        item.className = 'cart-item';
+        item.innerHTML = `
+          <img alt="${escapeHtml(p.name)}" src="${(p.images && p.images[0]) ? p.images[0] : ''}" />
+          <div style="flex:1">
+            <div style="display:flex;justify-content:space-between">
+              <div><strong>${escapeHtml(p.name)}</strong></div>
+              <div class="small">${formatVND(sub)}</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+              <div class="qty">
+                <button data-op="dec" data-id="${id}">−</button>
+                <div style="min-width:28px;text-align:center">${qty}</div>
+                <button data-op="inc" data-id="${id}">+</button>
+              </div>
+              <button class="link-like" data-op="remove" data-id="${id}">Xóa</button>
+            </div>
+          </div>
+        `;
+        el.appendChild(item);
+      });
+      // attach cart events
+      el.querySelectorAll('[data-op]').forEach(b => b.addEventListener('click', e => {
+        const op = e.target.dataset.op, id = e.target.dataset.id;
+        if(op === 'inc'){ cart[id] = (cart[id]||0) + 1; saveCart(); }
+        if(op === 'dec'){ cart[id] = Math.max(1, (cart[id]||1) - 1); saveCart(); }
+        if(op === 'remove'){ delete cart[id]; saveCart(); }
+      }));
+      byId('cartTotal').textContent = formatVND(total);
+    }
+
+    // ---------- product detail ----------
+    function openDetail(id){
+      selectedProduct = products.find(p => p.pk === id) || mockProducts.find(p => p.pk === id);
+      if(!selectedProduct) return alert('Sản phẩm không tồn tại');
+      byId('detailName').textContent = selectedProduct.name;
+      byId('detailDesc').textContent = selectedProduct.description || '';
+      byId('detailPrice').textContent = formatVND(selectedProduct.price || 0);
+      byId('detailQty').value = 1;
+      const img = byId('detailImage');
+      img.innerHTML = selectedProduct.images && selectedProduct.images.length ? `<img src="${selectedProduct.images[0]}" style="max-width:100%;max-height:100%;object-fit:cover" />` : '<div class="muted">Không có ảnh</div>';
+      byId('detailCard').hidden = false;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    byId('btn-back').addEventListener('click', ()=> byId('detailCard').hidden = true);
+
+    // ---------- cart actions ----------
+    function addToCart(id, qty = 1){
+      cart[id] = (cart[id]||0) + qty;
+      saveCart();
+      toast('Đã thêm vào giỏ');
+    }
+    byId('btn-checkout').addEventListener('click', ()=> {
+      const el = byId('checkoutForm');
+      el.scrollIntoView({behavior:'smooth'});
+    });
+
+    // ---------- checkout submit ----------
+    byId('checkoutForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = byId('fieldName').value.trim();
+      const email = byId('fieldEmail').value.trim();
+      const address = byId('fieldAddress').value.trim();
+      if(!name || !email || !address) return alert('Vui lòng điền đầy đủ thông tin');
+
+      const items = Object.keys(cart).map(id => ({ productId: id, qty: cart[id] }));
+      if(items.length === 0) return alert('Giỏ hàng trống');
+
+      const payload = {
+        userId: email,
+        items,
+        shipping: { name, email, address },
+        paymentMethod: 'CASH_ON_DELIVERY'
+      };
+
+      try{
+        const res = await apiPost('/orders', payload);
+        if(res && (res.orderId || res.orderId === undefined && res.orderId !== null)){
+          // success
+          toast('Đặt hàng thành công! ID: ' + (res.orderId || '(tự tạo)'));
+          // clear cart
+          cart = {}; saveCart();
+          byId('checkoutNote').textContent = 'Đơn hàng đã gửi. Kiểm tra backend để xác nhận.';
+        } else {
+          // if backend returns created order object
+          toast('Đặt hàng thành công!');
+          cart = {}; saveCart();
+        }
+      }catch(err){
+        console.error(err);
+        alert('Lỗi gửi đơn: ' + (err.message || err));
+      }
+    });
+
+    // ---------- admin create product modal (simple) ----------
+    byId('btn-openAdmin').addEventListener('click', async ()=>{
+      const name = prompt('Tên sản phẩm (ví dụ: Áo cool)')?.trim();
+      if(!name) return;
+      const price = Number(prompt('Giá (số nguyên, VND)')?.trim() || 0);
+      const desc = prompt('Mô tả ngắn') || '';
+      const id = 'prod_' + Date.now();
+      const payload = { id, name, price, description: desc, images: [] };
+      try{
+        const res = await apiPost('/admin/products', payload);
+        // in mock mode, apiPost returns created product
+        products.unshift(res || payload);
+        renderProducts();
+        toast('Tạo sản phẩm thành công (admin).');
+      }catch(err){
+        alert('Lỗi tạo sản phẩm: ' + (err.message||err));
+      }
+    });
+
+    // ---------- API helpers ----------
+    async function apiGet(path){
+      if(USE_MOCK) return mockGet(path);
+      const url = buildUrl(path);
+      const r = await fetch(url, { method:'GET', headers: { 'Content-Type':'application/json' } });
+      if(!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    }
+    async function apiPost(path, body){
+      if(USE_MOCK) return mockPost(path,body);
+      const url = buildUrl(path);
+      const r = await fetch(url, { method:'POST', headers: { 'Content-Type':'application/json' }, body: JSON.stringify(body) });
+      const txt = await r.text();
+      try{ return JSON.parse(txt); }catch{ return txt; }
+    }
+    function buildUrl(path){
+      if(!API_BASE) throw new Error('API_BASE chưa được cấu hình. Nhập URL ở phần "Thông tin deploy".');
+      // ensure path begins with '/'
+      if(!path.startsWith('/')) path = '/' + path;
+      return API_BASE + path;
+    }
+
+    // ---------- mock API (in-browser) ----------
+    async function mockGet(path){
+      // supports /products and /products/{id}
+      if(path === '/products'){
+        // simulate backend structure { items: [...] }
+        return new Promise(resolve => setTimeout(()=> resolve({ items: mockProducts }), 300));
+      }
+      if(path.startsWith('/products/')){
+        const id = path.split('/')[2];
+        const p = mockProducts.find(x=>x.pk===id);
+        if(!p) throw new Error('404');
+        return new Promise(resolve => setTimeout(()=> resolve(p), 150));
+      }
+      throw new Error('Mock GET not implemented: ' + path);
+    }
+    async function mockPost(path, body){
+      if(path === '/admin/products'){
+        // add to mockProducts
+        mockProducts.unshift(body);
+        return new Promise(resolve => setTimeout(()=> resolve(body), 200));
+      }
+      if(path === '/orders'){
+        // create fake order id and return it
+        const order = Object.assign({ orderId: 'order_' + Date.now(), status:'CREATED', createdAt: new Date().toISOString() }, body);
+        return new Promise(resolve => setTimeout(()=> resolve(order), 300));
+      }
+      throw new Error('Mock POST not implemented: ' + path);
+    }
+
+    // ---------- load products from API ----------
+    async function loadProducts(){
+      try{
+        let data = await apiGet('/products');
+        // If backend returns { items: [...] }
+        if(data && Array.isArray(data.items)) products = data.items;
+        else if(Array.isArray(data)) products = data;
+        else products = data.items || [];
+      }catch(err){
+        console.warn('loadProducts failed, fallback to mock', err);
+        products = mockProducts;
+        USE_MOCK = true;
+        byId('btn-toggleMock').textContent = 'Mock: ON';
+      }
+      renderProducts();
+      renderCart();
+    }
+
+    // ---------- UI controls ----------
+    byId('btn-refresh').addEventListener('click', ()=> loadProducts());
+    byId('btn-toggleMock').addEventListener('click', ()=>{
+      USE_MOCK = !USE_MOCK;
+      byId('btn-toggleMock').textContent = USE_MOCK ? 'Mock: ON' : 'Mock: OFF';
+      toast('Mock ' + (USE_MOCK ? 'bật' : 'tắt'));
+      loadProducts();
+    });
+    byId('btn-saveApi').addEventListener('click', ()=>{
+      const v = byId('apiBaseInput').value.trim();
+      if(!v) return alert('Nhập API_BASE hợp lệ');
+      API_BASE = v.replace(/\/+$/,''); // remove trailing slash
+      USE_MOCK = false;
+      byId('btn-toggleMock').textContent = 'Mock: OFF';
+      localStorage.setItem('shopmini_api_base', API_BASE);
+      byId('userBadge').textContent = 'Frontend → ' + (API_BASE.split('//')[1] || API_BASE);
+      toast('API_BASE đã lưu');
+    });
+    byId('btn-useMock').addEventListener('click', ()=>{
+      USE_MOCK = true;
+      byId('btn-toggleMock').textContent = 'Mock: ON';
+      localStorage.removeItem('shopmini_api_base');
+      toast('Sử dụng mock mode (local)');
+      loadProducts();
+    });
+
+    // ---------- util: simple toast ----------
+    function toast(msg){
+      const t = document.createElement('div');
+      t.textContent = msg;
+      t.style.position='fixed';t.style.right='20px';t.style.bottom='20px';
+      t.style.background='linear-gradient(90deg,var(--accent),var(--accent-2))';
+      t.style.color='white';t.style.padding='10px 14px';t.style.borderRadius='10px';t.style.zIndex=9999;
+      document.body.appendChild(t);
+      setTimeout(()=> t.style.opacity='0',2200);
+      setTimeout(()=> t.remove(),2600);
+    }
+
+    // ---------- small helper: XSS escape ----------
+    function escapeHtml(s){
+      if(!s && s!==0) return '';
+      return String(s).replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]); });
+    }
+
+    // ---------- init ----------
+    (function init(){
+      const savedApi = localStorage.getItem('shopmini_api_base');
+      if(savedApi){ API_BASE = savedApi; USE_MOCK = false; byId('apiBaseInput').value = API_BASE; byId('btn-toggleMock').textContent = 'Mock: OFF'; byId('userBadge').textContent = 'Frontend → ' + (API_BASE.split('//')[1] || API_BASE); }
+      else { byId('btn-toggleMock').textContent = 'Mock: ON'; USE_MOCK = true; }
+      loadProducts();
+      // add event: add from detail
+      byId('btn-addCart').addEventListener('click', ()=> {
+        const q = Number(byId('detailQty').value || 1);
+        if(!selectedProduct) return;
+        addToCart(selectedProduct.pk, Math.max(1,q));
+        byId('detailCard').hidden = true;
+      });
+      // apiBase input fill
+      byId('apiBaseInput').value = API_BASE;
+      // clear cart button
+      byId('btn-clearCart').addEventListener('click', ()=> { cart = {}; saveCart(); });
+    })();
+  </script>
+</body>
+</html>
