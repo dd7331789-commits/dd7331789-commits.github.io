@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <title>Gửi người yêu 💖</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #ff9bbb, #ffd6e8);
+      font-family: "Poppins", sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      color: #fff;
+    }
+    .box {
+      background: rgba(255,255,255,0.15);
+      padding: 30px;
+      border-radius: 20px;
+      backdrop-filter: blur(6px);
+      width: 90%;
+      max-width: 420px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.3);
+    }
+    h1 {
+      font-size: 28px;
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+    button {
+      background: #ff4f7b;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      font-size: 18px;
+      border-radius: 14px;
+      cursor: pointer;
+      margin-top: 16px;
+      transition: 0.2s;
+    }
+    button:hover {
+      background: #ff355f;
+      transform: scale(1.05);
+    }
+    video {
+      width: 100%;
+      margin-top: 20px;
+      border-radius: 14px;
+      box-shadow: 0 0 12px rgba(255,255,255,0.4);
+      display: none;
+    }
+    .msg {
+      font-size: 15px;
+      opacity: 0.9;
+      margin-top: 10px;
+    }
+
+    /* Floating hearts */
+    .heart {
+      position: fixed;
+      bottom: -20px;
+      font-size: 24px;
+      animation: floatUp 4s linear infinite;
+      opacity: 0.8;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(-120vh) scale(1.6); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="box">
+    <h1>Em bật camera cho anh xem<br>một xíu được không? 😳💖</h1>
+    <p class="msg">Anh nhớ gương mặt dễ thương của em á…</p>
+    <button onclick="startCam()">Bật camera nè 📸</button>
+
+    <video id="cam" autoplay playsinline></video>
+  </div>
+
+<script>
+  function startCam() {
+    const video = document.getElementById("cam");
+    navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+      video.srcObject = stream;
+      video.style.display = "block";
+      spawnHearts();
+    }).catch(err => {
+      alert("Em chưa cho phép camera đó 😢");
+    });
+  }
+
+  function spawnHearts() {
+    setInterval(() => {
+      const h = document.createElement("div");
+      h.className = "heart";
+      h.textContent = "💖";
+      h.style.left = Math.random() * 100 + "vw";
+      h.style.animationDuration = (3 + Math.random()*2) + "s";
+      document.body.appendChild(h);
+      setTimeout(() => h.remove(), 5000);
+    }, 500);
+  }
+</script>
+
+</body>
+</html>
