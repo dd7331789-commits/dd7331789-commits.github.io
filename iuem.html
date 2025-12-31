@@ -1,111 +1,253 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8">
-  <title>Gửi người yêu 💖</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(135deg, #ff9bbb, #ffd6e8);
-      font-family: "Poppins", sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      text-align: center;
-      color: #fff;
-    }
-    .box {
-      background: rgba(255,255,255,0.15);
-      padding: 30px;
-      border-radius: 20px;
-      backdrop-filter: blur(6px);
-      width: 90%;
-      max-width: 420px;
-      box-shadow: 0 0 20px rgba(255,255,255,0.3);
-    }
-    h1 {
-      font-size: 28px;
-      line-height: 1.4;
-      margin-bottom: 10px;
-    }
-    button {
-      background: #ff4f7b;
-      color: #fff;
-      border: none;
-      padding: 12px 20px;
-      font-size: 18px;
-      border-radius: 14px;
-      cursor: pointer;
-      margin-top: 16px;
-      transition: 0.2s;
-    }
-    button:hover {
-      background: #ff355f;
-      transform: scale(1.05);
-    }
-    video {
-      width: 100%;
-      margin-top: 20px;
-      border-radius: 14px;
-      box-shadow: 0 0 12px rgba(255,255,255,0.4);
-      display: none;
-    }
-    .msg {
-      font-size: 15px;
-      opacity: 0.9;
-      margin-top: 10px;
-    }
+<meta charset="UTF-8">
+<title>🎆 Happy New Year 🎆</title>
 
-    /* Floating hearts */
-    .heart {
-      position: fixed;
-      bottom: -20px;
-      font-size: 24px;
-      animation: floatUp 4s linear infinite;
-      opacity: 0.8;
-    }
-    @keyframes floatUp {
-      0% { transform: translateY(0) scale(1); }
-      100% { transform: translateY(-120vh) scale(1.6); opacity: 0; }
-    }
-  </style>
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: radial-gradient(circle at bottom, #020111 0%, #000 70%);
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+}
+
+/* ===== TEXT ===== */
+#countdown {
+    position: absolute;
+    top: 26%;
+    width: 100%;
+    text-align: center;
+    font-size: 76px;
+    font-weight: bold;
+    line-height: 1.3;
+    text-shadow: 0 0 12px gold;
+    z-index: 10;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+#subtitle {
+    position: absolute;
+    top: 40%;
+    width: 100%;
+    text-align: center;
+    font-size: 26px;
+    opacity: 0.85;
+    z-index: 10;
+}
+
+#wish {
+    position: absolute;
+    top: 54%;
+    width: 100%;
+    text-align: center;
+    font-size: 32px;
+    color: #ffd6e8;
+    text-shadow: 0 0 10px #ff69b4;
+    opacity: 0;
+    z-index: 10;
+    transition: opacity 2.5s ease;
+}
+
+canvas {
+    position: fixed;
+    inset: 0;
+}
+</style>
 </head>
+
 <body>
 
-  <div class="box">
-    <h1>Em bật camera cho anh xem<br>một xíu được không? 😳💖</h1>
-    <p class="msg">Anh nhớ gương mặt dễ thương của em á…</p>
-    <button onclick="startCam()">Bật camera nè 📸</button>
+<div id="countdown">Loading...</div>
+<div id="subtitle">⏳ Đang chờ khoảnh khắc giao thừa...</div>
+<div id="wish"></div>
 
-    <video id="cam" autoplay playsinline></video>
-  </div>
+<canvas id="fireworks"></canvas>
 
 <script>
-  function startCam() {
-    const video = document.getElementById("cam");
-    navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
-      video.srcObject = stream;
-      video.style.display = "block";
-      spawnHearts();
-    }).catch(err => {
-      alert("Em chưa cho phép camera đó 😢");
-    });
-  }
+/* ========= COUNTDOWN ========= */
+function nextNewYear() {
+    const n = new Date();
+    return new Date(n.getFullYear() + 1, 0, 1, 0, 0, 0);
+}
 
-  function spawnHearts() {
-    setInterval(() => {
-      const h = document.createElement("div");
-      h.className = "heart";
-      h.textContent = "💖";
-      h.style.left = Math.random() * 100 + "vw";
-      h.style.animationDuration = (3 + Math.random()*2) + "s";
-      document.body.appendChild(h);
-      setTimeout(() => h.remove(), 5000);
-    }, 500);
-  }
+const target = nextNewYear();
+const cd = document.getElementById("countdown");
+const sub = document.getElementById("subtitle");
+const wishEl = document.getElementById("wish");
+
+let newYear = false;
+let endPhase = false;
+let newYearTime = 0;
+
+/* ========= WISH ========= */
+const wishes = [
+    "💖 Hồng à, chúc em luôn mạnh khỏe và bình an",
+    "🌸 Mong rằng mọi ước mơ của Hồng trong năm mới đều thành hiện thực",
+    "🌟 Cảm ơn Hồng vì đã xuất hiện và làm cuộc sống này dịu dàng hơn",
+    "💞 Chúc cho Hồng luôn mỉm cười thật nhiều",
+    "🎉 Năm mới rồi, mong Hồng luôn hạnh phúc"
+];
+let wIndex = 0;
+
+function showWish() {
+    wishEl.style.opacity = 0;
+    setTimeout(() => {
+        wishEl.innerHTML = wishes[wIndex];
+        wishEl.style.opacity = 1;
+        wIndex = (wIndex + 1) % wishes.length;
+    }, 1200);
+}
+
+function startWishes() {
+    showWish();
+    setInterval(showWish, 8000);
+}
+
+/* ========= TIMER ========= */
+setInterval(() => {
+    const now = new Date();
+    const diff = target - now;
+
+    if (diff <= 0) {
+        if (!newYear) {
+            newYear = true;
+            newYearTime = Date.now();
+            cd.innerHTML = "🎆 HAPPY NEW YEAR 🎆";
+            sub.innerHTML = "Chúc mừng năm mới 🎉";
+            startWishes();
+        }
+        return;
+    }
+
+    const h = Math.floor(diff / 3600000);
+    const m = Math.floor(diff / 60000) % 60;
+    const s = Math.floor(diff / 1000) % 60;
+
+    cd.style.transform = "scale(1.08)";
+    cd.style.opacity = 0.6;
+
+    setTimeout(() => {
+        cd.innerHTML =
+            `${String(h).padStart(2,'0')}:` +
+            `${String(m).padStart(2,'0')}:` +
+            `${String(s).padStart(2,'0')}`;
+        cd.style.transform = "scale(1)";
+        cd.style.opacity = 1;
+    }, 200);
+
+}, 1000);
+
+/* ========= FIREWORKS ========= */
+const canvas = document.getElementById("fireworks");
+const ctx = canvas.getContext("2d");
+
+function resize() {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+}
+resize();
+window.onresize = resize;
+
+const fireworks = [];
+const particles = [];
+
+class Firework {
+    constructor(x, tx, ty) {
+        this.x = x;
+        this.y = canvas.height;
+        this.tx = tx;
+        this.ty = ty;
+        this.vx = (tx - x) / 45;
+        this.vy = (ty - this.y) / 45;
+    }
+    update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (Math.hypot(this.tx - this.x, this.ty - this.y) < 8) {
+            explode(this.tx, this.ty);
+            return false;
+        }
+        return true;
+    }
+    draw() {
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(this.x, this.y, 2, 2);
+    }
+}
+
+class Particle {
+    constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        const a = Math.random() * Math.PI * 2;
+        const s = Math.random() * 4 + 1.5;
+        this.vx = Math.cos(a) * s;
+        this.vy = Math.sin(a) * s;
+        this.alpha = 1;
+        this.color = color;
+    }
+    update() {
+        this.vy += 0.035;
+        this.x += this.vx;
+        this.y += this.vy;
+        this.alpha -= endPhase ? 0.02 : 0.012;
+        return this.alpha > 0;
+    }
+    draw() {
+        ctx.globalAlpha = this.alpha;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = this.color;
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 2.2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+    }
+}
+
+function explode(x, y) {
+    const colors = ["#ffd700","#ff8ccf","#ff6666","#66ccff"];
+    for (let i = 0; i < 140; i++) {
+        particles.push(new Particle(x, y, colors[Math.floor(Math.random()*colors.length)]));
+    }
+}
+
+let fireworkTimer = 0;
+
+function animate() {
+    requestAnimationFrame(animate);
+    ctx.fillStyle = "rgba(0,0,0,0.28)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    if (newYear && !endPhase) {
+        fireworkTimer++;
+        if (fireworkTimer % 30 === 0) {
+            fireworks.push(
+                new Firework(
+                    Math.random()*canvas.width,
+                    Math.random()*canvas.width,
+                    Math.random()*canvas.height/2
+                )
+            );
+        }
+        if (Date.now() - newYearTime > 20000) endPhase = true;
+    }
+
+    for (let i = fireworks.length-1; i>=0; i--) {
+        if (!fireworks[i].update()) fireworks.splice(i,1);
+        else fireworks[i].draw();
+    }
+
+    for (let i = particles.length-1; i>=0; i--) {
+        if (!particles[i].update()) particles.splice(i,1);
+        else particles[i].draw();
+    }
+}
+
+animate();
 </script>
-
 </body>
 </html>
