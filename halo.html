@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>🎆 Happy New Year 🎆</title>
+<title>🧧 Giao Thừa Tết Âm Lịch 🧧</title>
 
 <style>
 html, body {
@@ -61,19 +61,21 @@ canvas {
 <body>
 
 <div id="countdown">Loading...</div>
-<div id="subtitle">⏳ Đang chờ khoảnh khắc giao thừa...</div>
+<div id="subtitle">⏳ Đang chờ khoảnh khắc giao thừa Tết Âm lịch...</div>
 <div id="wish"></div>
 
 <canvas id="fireworks"></canvas>
 
 <script>
-/* ========= COUNTDOWN ========= */
-function nextNewYear() {
-    const n = new Date();
-    return new Date(n.getFullYear() + 1, 0, 1, 0, 0, 0);
-}
+/* ========= GIAO THUA TET AM LICH ========= */
+/*
+   Giao thừa Tết Âm lịch 2026:
+   00:00:00 - 16/02/2026
+   (đêm 15 rạng sáng 16)
+*/
+const target = new Date(2026, 1, 16, 0, 0, 0);
 
-const target = nextNewYear();
+/* ========= ELEMENT ========= */
 const cd = document.getElementById("countdown");
 const sub = document.getElementById("subtitle");
 const wishEl = document.getElementById("wish");
@@ -84,11 +86,11 @@ let newYearTime = 0;
 
 /* ========= WISH ========= */
 const wishes = [
-    "💖 Hồng à, chúc em luôn mạnh khỏe và bình an",
-    "🌸 Mong rằng mọi ước mơ của Hồng trong năm mới đều thành hiện thực",
-    "🌟 Cảm ơn Hồng vì đã xuất hiện và làm cuộc sống này dịu dàng hơn",
-    "💞 Chúc cho Hồng luôn mỉm cười thật nhiều",
-    "🎉 Năm mới rồi, mong Hồng luôn hạnh phúc"
+    "🧧 Hồng à, chúc em năm mới bình an và nhiều may mắn",
+    "🌸 Mong rằng mọi điều tốt đẹp sẽ đến với Hồng",
+    "✨ Chúc Hồng vạn sự như ý, an khang thịnh vượng",
+    "💖 Mong nụ cười của Hồng sẽ theo suốt cả năm",
+    "🎆 Chúc mừng năm mới Âm lịch – mong Hồng luôn hạnh phúc"
 ];
 let wIndex = 0;
 
@@ -106,7 +108,7 @@ function startWishes() {
     setInterval(showWish, 8000);
 }
 
-/* ========= TIMER ========= */
+/* ========= COUNTDOWN ========= */
 setInterval(() => {
     const now = new Date();
     const diff = target - now;
@@ -115,8 +117,8 @@ setInterval(() => {
         if (!newYear) {
             newYear = true;
             newYearTime = Date.now();
-            cd.innerHTML = "🎆 HAPPY NEW YEAR 🎆";
-            sub.innerHTML = "Chúc mừng năm mới 🎉";
+            cd.innerHTML = "🧧 CHÚC MỪNG NĂM MỚI 🧧";
+            sub.innerHTML = "🎉 Giao thừa Tết Âm lịch 🎉";
             startWishes();
         }
         return;
