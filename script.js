@@ -1,78 +1,194 @@
-"use strict";
+const money = (n) => new Intl.NumberFormat("vi-VN").format(n) + "đ";
 
-const screen = document.getElementById("screen");
-const xmlns = "http://www.w3.org/2000/svg";
-const xlinkns = "http://www.w3.org/1999/xlink";
+// ===== Render products =====
+const products = window.PRODUCTS || [];
+const grid = document.getElementById("productGrid");
+const searchInput = document.getElementById("searchInput");
+const priceFilter = document.getElementById("priceFilter");
 
-window.addEventListener(
-	"pointermove",
-	(e) => {
-		pointer.x = e.clientX;
-		pointer.y = e.clientY;
-		rad = 0;
-	},
-	false
-);
-
-const resize = () => {
-	width = window.innerWidth;
-	height = window.innerHeight;
-};
-
-let width, height;
-window.addEventListener("resize", () => resize(), false);
-resize();
-
-const prepend = (use, i) => {
-	const elem = document.createElementNS(xmlns, "use");
-	elems[i].use = elem;
-	elem.setAttributeNS(xlinkns, "xlink:href", "#" + use);
-	screen.prepend(elem);
-};
-
-const N = 40;
-
-const elems = [];
-for (let i = 0; i < N; i++) elems[i] = { use: null, x: width / 2, y: 0 };
-const pointer = { x: width / 2, y: height / 2 };
-const radm = Math.min(pointer.x, pointer.y) - 20;
-let frm = Math.random();
-let rad = 0;
-
-for (let i = 1; i < N; i++) {
-	if (i === 1) prepend("Cabeza", i);
-	else if (i === 8 || i === 14) prepend("Aletas", i);
-	else prepend("Espina", i);
+function matchesPrice(product, mode){
+  const p = product.price;
+  if(mode === "low") return p < 1500000;
+  if(mode === "mid") return p >= 1500000 && p <= 2500000;
+  if(mode === "high") return p > 2500000;
+  return true;
 }
 
-const run = () => {
-	requestAnimationFrame(run);
-	let e = elems[0];
-	const ax = (Math.cos(3 * frm) * rad * width) / height;
-	const ay = (Math.sin(4 * frm) * rad * height) / width;
-	e.x += (ax + pointer.x - e.x) / 10;
-	e.y += (ay + pointer.y - e.y) / 10;
-	for (let i = 1; i < N; i++) {
-		let e = elems[i];
-		let ep = elems[i - 1];
-		const a = Math.atan2(e.y - ep.y, e.x - ep.x);
-		e.x += (ep.x - e.x + (Math.cos(a) * (100 - i)) / 5) / 4;
-		e.y += (ep.y - e.y + (Math.sin(a) * (100 - i)) / 5) / 4;
-		const s = (162 + 4 * (1 - i)) / 50;
-		e.use.setAttributeNS(
-			null,
-			"transform",
-			`translate(${(ep.x + e.x) / 2},${(ep.y + e.y) / 2}) rotate(${
-				(180 / Math.PI) * a
-			}) translate(${0},${0}) scale(${s},${s})`
-		);
-	}
-	if (rad < radm) rad++;
-	frm += 0.003;
-	if (rad > 60) {
-		pointer.x += (width / 2 - pointer.x) * 0.05;
-		pointer.y += (height / 2 - pointer.y) * 0.05;
-	}
-};
+function render(list){
+  grid.innerHTML = "";
+  list.forEach(prod => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <div class="card__img">
+        <img src="${prod.img}" alt="${prod.name}">
+      </div>
+      <div class="card__body">
+        <div class="card__title">${prod.name}</div>
+        <div class="card__meta">${prod.category}</div>
 
-run();
+        <div class="priceRow">
+          <div class="price">${money(prod.price)}</div>
+          <div class="small text-muted">Giá niêm yết</div>
+        </div>
+
+        <div class="card__actions">
+          <button class="card__btn" data-add="${prod.id}">+ Thêm vào giỏ</button>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function applyFilters(){
+  const q = (searchInput?.value || "").trim().toLowerCase();
+  const mode = priceFilter?.value || "all";
+
+  const list = products.filter(p => {
+    const okSearch = !q || p.name.toLowerCase().includes(q);
+    const okPrice = matchesPrice(p, mode);
+    return okSearch && okPrice;
+  });
+
+  render(list);
+}
+
+applyFilters();
+
+searchInput?.addEventListener("input", applyFilters);
+priceFilter?.addEventListener("change", applyFilters);
+
+// ===== Cart logic =====
+const cartDrawer = document.getElementById("cartDrawer");
+const cartOpenBtn = document.getElementById("cartOpenBtn");
+const cartCloseBtn = document.getElementById("cartCloseBtn");
+const cartBackdrop = document.getElementById("cartBackdrop");
+const cartItemsEl = document.getElementById("cartItems");
+const cartEmptyEl = document.getElementById("cartEmpty");
+const cartCountEl = document.getElementById("cartCount");
+const cartTotalEl = document.getElementById("cartTotal");
+const checkoutBtn = document.getElementById("checkoutBtn");
+
+let cart = {}; // {id: qty}
+
+function openCart(){
+  cartDrawer.classList.add("show");
+  cartDrawer.setAttribute("aria-hidden", "false");
+}
+function closeCart(){
+  cartDrawer.classList.remove("show");
+  cartDrawer.setAttribute("aria-hidden", "true");
+}
+
+cartOpenBtn?.addEventListener("click", openCart);
+cartCloseBtn?.addEventListener("click", closeCart);
+cartBackdrop?.addEventListener("click", closeCart);
+
+function getProductById(id){
+  return products.find(p => p.id === id);
+}
+
+function calcCount(){
+  return Object.values(cart).reduce((sum, qty) => sum + qty, 0);
+}
+function calcTotal(){
+  let total = 0;
+  for(const [id, qty] of Object.entries(cart)){
+    const prod = getProductById(id);
+    if(prod) total += prod.price * qty;
+  }
+  return total;
+}
+
+function renderCart(){
+  const ids = Object.keys(cart);
+  cartItemsEl.innerHTML = "";
+
+  const count = calcCount();
+  cartCountEl.textContent = count;
+
+  const total = calcTotal();
+  cartTotalEl.textContent = money(total);
+
+  if(ids.length === 0){
+    cartEmptyEl.style.display = "block";
+    cartItemsEl.style.display = "none";
+    return;
+  }
+  cartEmptyEl.style.display = "none";
+  cartItemsEl.style.display = "block";
+
+  ids.forEach(id => {
+    const prod = getProductById(id);
+    const qty = cart[id];
+    const line = prod.price * qty;
+
+    const row = document.createElement("div");
+    row.className = "cart-item";
+    row.innerHTML = `
+      <div class="cart-thumb">
+        <img src="${prod.img}" alt="${prod.name}">
+      </div>
+      <div>
+        <h4>${prod.name}</h4>
+        <div class="cat">${prod.category}</div>
+        <div class="qtyRow">
+          <button class="qtyBtn" data-dec="${id}">-</button>
+          <div class="qtyNum">SL: ${qty}</div>
+          <button class="qtyBtn" data-inc="${id}">+</button>
+        </div>
+      </div>
+      <div class="linePrice">${money(line)}</div>
+    `;
+    cartItemsEl.appendChild(row);
+  });
+}
+
+renderCart();
+
+grid.addEventListener("click", (e) => {
+  const addId = e.target?.dataset?.add;
+  if(addId){
+    cart[addId] = (cart[addId] || 0) + 1;
+    renderCart();
+    openCart();
+  }
+});
+
+cartItemsEl.addEventListener("click", (e) => {
+  const incId = e.target?.dataset?.inc;
+  const decId = e.target?.dataset?.dec;
+
+  if(incId){
+    cart[incId] = (cart[incId] || 0) + 1;
+    renderCart();
+  }
+  if(decId){
+    cart[decId] = (cart[decId] || 0) - 1;
+    if(cart[decId] <= 0) delete cart[decId];
+    renderCart();
+  }
+});
+
+checkoutBtn?.addEventListener("click", () => {
+  const total = calcTotal();
+  if(total === 0){
+    alert("Giỏ hàng trống!");
+    return;
+  }
+  alert("Demo thanh toán! Tổng đơn: " + money(total));
+});
+
+// ===== Contact form (demo) =====
+const contactForm = document.getElementById("contactForm");
+const formNote = document.getElementById("formNote");
+
+contactForm?.addEventListener("submit", (e) => {
+  e.preventDefault();
+  formNote.textContent = "Cảm ơn bạn! (Demo) Mình sẽ liên hệ sớm.";
+  contactForm.reset();
+});
+
+// Footer year
+document.getElementById("year").textContent = new Date().getFullYear();
