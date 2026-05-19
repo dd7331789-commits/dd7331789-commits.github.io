@@ -1,177 +1,417 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gửi Người Mình Thương</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #050505;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        canvas {
-            display: block;
-        }
+  <title>Anh Xin Lỗi 💖</title>
 
-        .content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            z-index: 10;
-            width: 90%;
-        }
+  <style>
 
-        /* Hiệu ứng trái tim */
-        .heart-box {
-            position: relative;
-            display: inline-block;
-            animation: beat 1.5s infinite;
-            cursor: pointer;
-        }
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, sans-serif;
+    }
 
-        .heart {
-            font-size: 80px;
-            color: #ff2d55;
-            text-shadow: 0 0 20px #ff2d55;
-        }
+    body{
+      height:100vh;
+      overflow:hidden;
 
-        @keyframes beat {
-            0% { transform: scale(1); }
-            15% { transform: scale(1.25); }
-            30% { transform: scale(1); }
-            45% { transform: scale(1.15); }
-            60% { transform: scale(1); }
-        }
+      background:
+      linear-gradient(
+        rgba(255,182,217,0.5),
+        rgba(255,214,236,0.5)
+      ),
+      url("https://i.pinimg.com/originals/6b/73/55/6b7355f4a6a2f5f2cf9a0eec2206b6d1.gif");
 
-        /* Lời nhắn */
-        .message-container {
-            margin-top: 30px;
-            min-height: 100px;
-        }
+      background-size:cover;
+      background-position:center;
 
-        #text-content {
-            color: white;
-            font-size: 1.5rem;
-            font-weight: 300;
-            line-height: 1.6;
-            text-shadow: 0 0 10px rgba(255,255,255,0.5);
-        }
+      display:flex;
+      justify-content:center;
+      align-items:center;
 
-        .hint {
-            color: #555;
-            font-size: 0.9rem;
-            margin-top: 10px;
-            letter-spacing: 2px;
-        }
-    </style>
+      position:relative;
+    }
+
+    /* Hộp chính */
+    .box{
+
+      width:430px;
+
+      background:rgba(255,255,255,0.2);
+
+      backdrop-filter:blur(15px);
+
+      border:1px solid rgba(255,255,255,0.3);
+
+      padding:40px;
+
+      border-radius:30px;
+
+      text-align:center;
+
+      box-shadow:
+      0 8px 32px rgba(0,0,0,0.2);
+
+      position:relative;
+
+      z-index:2;
+
+      animation:float 3s ease-in-out infinite;
+    }
+
+    @keyframes float{
+
+      0%,100%{
+        transform:translateY(0px);
+      }
+
+      50%{
+        transform:translateY(-10px);
+      }
+    }
+
+    /* Tim */
+    .heart{
+
+      font-size:85px;
+
+      margin-bottom:15px;
+
+      animation:beat 0.8s infinite;
+    }
+
+    @keyframes beat{
+
+      0%{
+        transform:scale(1);
+      }
+
+      50%{
+        transform:scale(1.18);
+      }
+
+      100%{
+        transform:scale(1);
+      }
+    }
+
+    /* Tiêu đề */
+    h1{
+
+      font-size:52px;
+
+      margin-bottom:15px;
+
+      background:linear-gradient(
+        90deg,
+        #ff2f7d,
+        #ff66b3,
+        #ff2f7d
+      );
+
+      -webkit-background-clip:text;
+
+      -webkit-text-fill-color:transparent;
+
+      animation:glow 2s infinite;
+    }
+
+    @keyframes glow{
+
+      0%{
+        filter:drop-shadow(0 0 5px #ff2f7d);
+      }
+
+      50%{
+        filter:drop-shadow(0 0 20px #ff66b3);
+      }
+
+      100%{
+        filter:drop-shadow(0 0 5px #ff2f7d);
+      }
+    }
+
+    p{
+      color:#444;
+      font-size:24px;
+      margin-bottom:35px;
+    }
+
+    /* Nút */
+    button{
+
+      border:none;
+
+      border-radius:999px;
+
+      cursor:pointer;
+
+      transition:0.25s;
+
+      font-weight:bold;
+
+      position:absolute;
+
+      box-shadow:
+      0 0 15px rgba(255,47,125,0.4);
+
+      z-index:5;
+    }
+
+    /* Đồng ý */
+    #yes{
+
+      background:linear-gradient(
+        45deg,
+        #ff2f7d,
+        #ff66b3
+      );
+
+      color:white;
+
+      padding:15px 30px;
+
+      font-size:20px;
+
+      left:80px;
+      top:300px;
+    }
+
+    #yes:hover{
+
+      transform:scale(1.12);
+
+      box-shadow:
+      0 0 30px #ff2f7d;
+    }
+
+    /* Không */
+    #no{
+
+      background:white;
+
+      color:#333;
+
+      padding:15px 30px;
+
+      font-size:20px;
+
+      left:260px;
+      top:300px;
+    }
+
+    /* Tim bay */
+    .love{
+position:absolute;
+
+      bottom:-50px;
+
+      animation:fly linear forwards;
+
+      color:#ff4d88;
+
+      z-index:1;
+    }
+
+    @keyframes fly{
+
+      0%{
+        transform:translateY(0);
+        opacity:0;
+      }
+
+      20%{
+        opacity:1;
+      }
+
+      100%{
+        transform:translateY(-120vh);
+        opacity:0;
+      }
+    }
+
+  </style>
 </head>
+
 <body>
 
-    <canvas id="stars"></canvas>
+  <!-- Nhạc nền -->
+  <audio autoplay loop>
+    <source src="https://files.catbox.moe/8xq0kx.mp3" type="audio/mp3">
+  </audio>
 
-    <div class="content">
-        <div class="heart-box" id="heartBtn">
-            <div class="heart">❤</div>
-        </div>
-        <div class="message-container">
-            <div id="text-content"></div>
-            <div class="hint" id="hintText">Chạm vào trái tim nhé...</div>
-        </div>
-    </div>
+  <!-- Box -->
+  <div class="box">
 
-    <script>
-        // 1. Hiệu ứng bầu trời sao lấp lánh
-        const canvas = document.getElementById('stars');
-        const ctx = canvas.getContext('2d');
-        let stars = [];
+    <div class="heart">💖</div>
 
-        function initCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            stars = [];
-            for (let i = 0; i < 200; i++) {
-                stars.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    size: Math.random() * 2,
-                    speed: Math.random() * 0.5
-                });
-            }
-        }
+    <h1>Anh Xin Lỗi...</h1>
 
-        function drawStars() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "white";
-            stars.forEach(star => {
-                ctx.beginPath();
-                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-                ctx.fill();
-                star.y -= star.speed;
-                if (star.y < 0) star.y = canvas.height;
-            });
-            requestAnimationFrame(drawStars);
-        }
+    <p>
+      Cho anh liếm lồn nha 🥺
+    </p>
 
-        window.addEventListener('resize', initCanvas);
-        initCanvas();
-        drawStars();
+  </div>
 
-        // 2. Hiệu ứng chạy chữ
-        const messages = [
-            "Chào cậu, người tớ thương...",
-            "Cảm ơn cậu đã xuất hiện trong cuộc đời tớ.",
-            "Tớ không biết nói lời hoa mỹ...",
-            "Nhưng với tớ, cậu là điều quý giá nhất.",
-            "Dù thế giới ngoài kia có khó khăn ra sao...",
-            "Thì ở đây vẫn luôn có tớ chờ cậu.",
-            "Yêu cậu rất nhiều! ❤️"
-        ];
+  <!-- Nút -->
+  <button id="yes">
+    Đồng Ý 💕
+  </button>
 
-        let msgIndex = 0;
-        let charIndex = 0;
-        const textElement = document.getElementById('text-content');
-        const heartBtn = document.getElementById('heartBtn');
-        const hintText = document.getElementById('hintText');
-        let isTyping = false;
+  <button id="no">
+    Không 😭
+  </button>
 
-        function typeWriter() {
-            if (charIndex < messages[msgIndex].length) {
-                textElement.innerHTML += messages[msgIndex].charAt(charIndex);
-                charIndex++;
-                setTimeout(typeWriter, 100);
-            } else {
-                isTyping = false;
-                if (msgIndex < messages.length - 1) {
-                    setTimeout(() => {
-                        if(!isTyping) {
-                            textElement.innerHTML = "";
-                            charIndex = 0;
-                            msgIndex++;
-                            isTyping = true;
-                            typeWriter();
-                        }
-                    }, 2000);
-                }
-            }
-        }
+  <script>
 
-        heartBtn.addEventListener('click', () => {
-            if (isTyping) return;
-            hintText.style.display = 'none';
-            textElement.innerHTML = "";
-            charIndex = 0;
-            msgIndex = 0;
-            isTyping = true;
-            typeWriter();
-        });
-    </script>
+    const noBtn =
+      document.getElementById("no");
+
+    const yesBtn =
+      document.getElementById("yes");
+
+    let size = 20;
+
+    // Nút KHÔNG chạy
+    noBtn.addEventListener(
+      "mouseenter",
+      moveButton
+    );
+
+    function moveButton(){
+
+      const padding = 20;
+
+      const maxX =
+        window.innerWidth -
+        noBtn.offsetWidth -
+        padding;
+
+      const maxY =
+        window.innerHeight -
+        noBtn.offsetHeight -
+        padding;
+
+      const randomX =
+        Math.floor(
+          Math.random() * maxX
+        );
+
+      const randomY =
+        Math.floor(
+          Math.random() * maxY
+        );
+
+      noBtn.style.left =
+        randomX + "px";
+
+      noBtn.style.top =
+        randomY + "px";
+
+      // Đồng ý to dần
+      size += 6;
+
+      yesBtn.style.fontSize =
+        size + "px";
+
+      yesBtn.style.padding =
+        (15 + size / 5) + "px " +
+        (30 + size / 3) + "px";
+    }
+
+    // Click đồng ý
+    yesBtn.addEventListener(
+      "click",
+      () => {
+
+      document.body.innerHTML = `
+
+      <div style="
+        height:100vh;
+        width:100%;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        flex-direction:column;
+
+        background:
+        linear-gradient(
+          rgba(255,182,217,0.5),
+          rgba(255,214,236,0.5)
+        ),
+        url('https://i.pinimg.com/originals/6b/73/55/6b7355f4a6a2f5f2cf9a0eec2206b6d1.gif');
+
+        background-size:cover;
+        background-position:center;
+
+        font-family:Arial;
+        text-align:center;
+      ">
+
+        <h1 style="
+          color:#ff2f7d;
+          font-size:90px;
+
+          text-shadow:
+          0 0 20px #ff66b3;
+        ">
+          YAYYYYY 💖
+        </h1>
+
+        <p style="
+          font-size:40px;
+          margin-top:20px;
+          color:white;
+
+          text-shadow:
+          0 0 10px black;
+        ">
+          Biết màaaa 😘
+        </p>
+
+      </div>
+
+      `;
+    });
+
+    // Tim bay
+    function createHeart(){
+
+      const heart =
+        document.createElement("div");
+
+      heart.classList.add("love");
+
+      heart.innerHTML = "💗";
+
+      heart.style.left =
+        Math.random() *
+window.innerWidth + "px";
+
+      heart.style.fontSize =
+        (20 + Math.random() * 35)
+        + "px";
+
+      heart.style.animationDuration =
+        (3 + Math.random() * 3)
+        + "s";
+
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+
+        heart.remove();
+
+      },6000);
+    }
+
+    setInterval(createHeart,250);
+
+  </script>
+
 </body>
 </html>
