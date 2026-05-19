@@ -1,17 +1,159 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>hello</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Anh Nhớ Em ❤️</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body{
+      overflow:hidden;
+      background: linear-gradient(135deg,#ff5f9e,#ff89c0,#ffc2de);
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      position:relative;
+    }
+
+    .main-btn{
+      padding:18px 40px;
+      font-size:24px;
+      border:none;
+      border-radius:20px;
+      background:white;
+      color:#ff2d75;
+      font-weight:bold;
+      cursor:pointer;
+      box-shadow:0 0 20px rgba(255,255,255,0.7);
+      transition:0.3s;
+      z-index:9999;
+    }
+
+    .main-btn:hover{
+      transform:scale(1.08);
+    }
+
+    .popup{
+      position:absolute;
+      width:220px;
+      height:120px;
+      background:white;
+      border-radius:20px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      font-size:28px;
+      font-weight:bold;
+      color:#ff2d75;
+      box-shadow:0 0 20px rgba(0,0,0,0.25);
+      animation:showUp 0.4s ease;
+      user-select:none;
+    }
+
+    @keyframes showUp{
+      0%{
+        transform:scale(0);
+        opacity:0;
+      }
+      100%{
+        transform:scale(1);
+        opacity:1;
+      }
+    }
+
+    .heart{
+      position:absolute;
+      color:white;
+      font-size:20px;
+      animation:fall linear infinite;
+      opacity:0.8;
+    }
+
+    @keyframes fall{
+      from{
+        transform:translateY(-100px);
+      }
+      to{
+        transform:translateY(110vh);
+      }
+    }
+  </style>
 </head>
 <body>
-    <!-- <button onclick="alert('Hello')">Click Me</button> -->
-    <script>
-        alert("Chào ĐH Đại Nam");
-    </script>
 
-    <script src="./haha.js"></script>
+<button class="main-btn" onclick="startLove()">
+  Bấm Vào Đây ❤️
+</button>
+
+<script>
+  let started = false;
+
+  function startLove(){
+    if(started) return;
+    started = true;
+
+    const btn = document.querySelector(".main-btn");
+    btn.style.display = "none";
+
+    // Tạo popup liên tục
+    let count = 0;
+
+    const interval = setInterval(() => {
+
+      const box = document.createElement("div");
+      box.className = "popup";
+      box.innerText = "ANH NHỚ EM ❤️";
+
+      // random vị trí
+      const x = Math.random() * (window.innerWidth - 220);
+      const y = Math.random() * (window.innerHeight - 120);
+
+      box.style.left = x + "px";
+      box.style.top = y + "px";
+
+      // random xoay nhẹ
+      const rotate = (Math.random() * 20) - 10;
+      box.style.transform = `rotate(${rotate}deg)`;
+
+      document.body.appendChild(box);
+
+      count++;
+
+      // chàn ngập màn hình
+      if(count > 120){
+        clearInterval(interval);
+      }
+
+    }, 120);
+
+    // tạo tim rơi
+    setInterval(createHeart, 120);
+  }
+
+  function createHeart(){
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
+
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.fontSize = (Math.random() * 25 + 15) + "px";
+    heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+      heart.remove();
+    }, 5000);
+  }
+</script>
 
 </body>
 </html>
