@@ -1,417 +1,159 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Anh Xin Lỗi 💖</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Anh Nhớ Em ❤️</title>
 
   <style>
-
     *{
       margin:0;
       padding:0;
       box-sizing:border-box;
-      font-family:Arial, sans-serif;
+      font-family: Arial, sans-serif;
     }
 
     body{
-      height:100vh;
       overflow:hidden;
-
-      background:
-      linear-gradient(
-        rgba(255,182,217,0.5),
-        rgba(255,214,236,0.5)
-      ),
-      url("https://i.pinimg.com/originals/6b/73/55/6b7355f4a6a2f5f2cf9a0eec2206b6d1.gif");
-
-      background-size:cover;
-      background-position:center;
-
+      background: linear-gradient(135deg,#ff5f9e,#ff89c0,#ffc2de);
+      height:100vh;
       display:flex;
       justify-content:center;
       align-items:center;
-
       position:relative;
     }
 
-    /* Hộp chính */
-    .box{
-
-      width:430px;
-
-      background:rgba(255,255,255,0.2);
-
-      backdrop-filter:blur(15px);
-
-      border:1px solid rgba(255,255,255,0.3);
-
-      padding:40px;
-
-      border-radius:30px;
-
-      text-align:center;
-
-      box-shadow:
-      0 8px 32px rgba(0,0,0,0.2);
-
-      position:relative;
-
-      z-index:2;
-
-      animation:float 3s ease-in-out infinite;
-    }
-
-    @keyframes float{
-
-      0%,100%{
-        transform:translateY(0px);
-      }
-
-      50%{
-        transform:translateY(-10px);
-      }
-    }
-
-    /* Tim */
-    .heart{
-
-      font-size:85px;
-
-      margin-bottom:15px;
-
-      animation:beat 0.8s infinite;
-    }
-
-    @keyframes beat{
-
-      0%{
-        transform:scale(1);
-      }
-
-      50%{
-        transform:scale(1.18);
-      }
-
-      100%{
-        transform:scale(1);
-      }
-    }
-
-    /* Tiêu đề */
-    h1{
-
-      font-size:52px;
-
-      margin-bottom:15px;
-
-      background:linear-gradient(
-        90deg,
-        #ff2f7d,
-        #ff66b3,
-        #ff2f7d
-      );
-
-      -webkit-background-clip:text;
-
-      -webkit-text-fill-color:transparent;
-
-      animation:glow 2s infinite;
-    }
-
-    @keyframes glow{
-
-      0%{
-        filter:drop-shadow(0 0 5px #ff2f7d);
-      }
-
-      50%{
-        filter:drop-shadow(0 0 20px #ff66b3);
-      }
-
-      100%{
-        filter:drop-shadow(0 0 5px #ff2f7d);
-      }
-    }
-
-    p{
-      color:#444;
+    .main-btn{
+      padding:18px 40px;
       font-size:24px;
-      margin-bottom:35px;
-    }
-
-    /* Nút */
-    button{
-
       border:none;
-
-      border-radius:999px;
-
-      cursor:pointer;
-
-      transition:0.25s;
-
-      font-weight:bold;
-
-      position:absolute;
-
-      box-shadow:
-      0 0 15px rgba(255,47,125,0.4);
-
-      z-index:5;
-    }
-
-    /* Đồng ý */
-    #yes{
-
-      background:linear-gradient(
-        45deg,
-        #ff2f7d,
-        #ff66b3
-      );
-
-      color:white;
-
-      padding:15px 30px;
-
-      font-size:20px;
-
-      left:80px;
-      top:300px;
-    }
-
-    #yes:hover{
-
-      transform:scale(1.12);
-
-      box-shadow:
-      0 0 30px #ff2f7d;
-    }
-
-    /* Không */
-    #no{
-
+      border-radius:20px;
       background:white;
-
-      color:#333;
-
-      padding:15px 30px;
-
-      font-size:20px;
-
-      left:260px;
-      top:300px;
+      color:#ff2d75;
+      font-weight:bold;
+      cursor:pointer;
+      box-shadow:0 0 20px rgba(255,255,255,0.7);
+      transition:0.3s;
+      z-index:9999;
     }
 
-    /* Tim bay */
-    .love{
-position:absolute;
-
-      bottom:-50px;
-
-      animation:fly linear forwards;
-
-      color:#ff4d88;
-
-      z-index:1;
+    .main-btn:hover{
+      transform:scale(1.08);
     }
 
-    @keyframes fly{
+    .popup{
+      position:absolute;
+      width:220px;
+      height:120px;
+      background:white;
+      border-radius:20px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      font-size:28px;
+      font-weight:bold;
+      color:#ff2d75;
+      box-shadow:0 0 20px rgba(0,0,0,0.25);
+      animation:showUp 0.4s ease;
+      user-select:none;
+    }
 
+    @keyframes showUp{
       0%{
-        transform:translateY(0);
+        transform:scale(0);
         opacity:0;
       }
-
-      20%{
+      100%{
+        transform:scale(1);
         opacity:1;
       }
+    }
 
-      100%{
-        transform:translateY(-120vh);
-        opacity:0;
+    .heart{
+      position:absolute;
+      color:white;
+      font-size:20px;
+      animation:fall linear infinite;
+      opacity:0.8;
+    }
+
+    @keyframes fall{
+      from{
+        transform:translateY(-100px);
+      }
+      to{
+        transform:translateY(110vh);
       }
     }
-
   </style>
 </head>
-
 <body>
 
-  <!-- Nhạc nền -->
-  <audio autoplay loop>
-    <source src="https://files.catbox.moe/8xq0kx.mp3" type="audio/mp3">
-  </audio>
+<button class="main-btn" onclick="startLove()">
+  Bấm Vào Đây ❤️
+</button>
 
-  <!-- Box -->
-  <div class="box">
+<script>
+  let started = false;
 
-    <div class="heart">💖</div>
+  function startLove(){
+    if(started) return;
+    started = true;
 
-    <h1>Cho anh ...</h1>
+    const btn = document.querySelector(".main-btn");
+    btn.style.display = "none";
 
-    <p>
-      Cho anh liếm lồn nha 🥺
-    </p>
+    // Tạo popup liên tục
+    let count = 0;
 
-  </div>
+    const interval = setInterval(() => {
 
-  <!-- Nút -->
-  <button id="yes">
-    Đồng Ý 💕
-  </button>
+      const box = document.createElement("div");
+      box.className = "popup";
+      box.innerText = "ANH NHỚ EM ❤️";
 
-  <button id="no">
-    Không 😭
-  </button>
+      // random vị trí
+      const x = Math.random() * (window.innerWidth - 220);
+      const y = Math.random() * (window.innerHeight - 120);
 
-  <script>
+      box.style.left = x + "px";
+      box.style.top = y + "px";
 
-    const noBtn =
-      document.getElementById("no");
+      // random xoay nhẹ
+      const rotate = (Math.random() * 20) - 10;
+      box.style.transform = `rotate(${rotate}deg)`;
 
-    const yesBtn =
-      document.getElementById("yes");
+      document.body.appendChild(box);
 
-    let size = 20;
+      count++;
 
-    // Nút KHÔNG chạy
-    noBtn.addEventListener(
-      "mouseenter",
-      moveButton
-    );
+      // chàn ngập màn hình
+      if(count > 120){
+        clearInterval(interval);
+      }
 
-    function moveButton(){
+    }, 120);
 
-      const padding = 20;
+    // tạo tim rơi
+    setInterval(createHeart, 120);
+  }
 
-      const maxX =
-        window.innerWidth -
-        noBtn.offsetWidth -
-        padding;
+  function createHeart(){
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
 
-      const maxY =
-        window.innerHeight -
-        noBtn.offsetHeight -
-        padding;
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.fontSize = (Math.random() * 25 + 15) + "px";
+    heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
 
-      const randomX =
-        Math.floor(
-          Math.random() * maxX
-        );
+    document.body.appendChild(heart);
 
-      const randomY =
-        Math.floor(
-          Math.random() * maxY
-        );
-
-      noBtn.style.left =
-        randomX + "px";
-
-      noBtn.style.top =
-        randomY + "px";
-
-      // Đồng ý to dần
-      size += 6;
-
-      yesBtn.style.fontSize =
-        size + "px";
-
-      yesBtn.style.padding =
-        (15 + size / 5) + "px " +
-        (30 + size / 3) + "px";
-    }
-
-    // Click đồng ý
-    yesBtn.addEventListener(
-      "click",
-      () => {
-
-      document.body.innerHTML = `
-
-      <div style="
-        height:100vh;
-        width:100%;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        flex-direction:column;
-
-        background:
-        linear-gradient(
-          rgba(255,182,217,0.5),
-          rgba(255,214,236,0.5)
-        ),
-        url('https://i.pinimg.com/originals/6b/73/55/6b7355f4a6a2f5f2cf9a0eec2206b6d1.gif');
-
-        background-size:cover;
-        background-position:center;
-
-        font-family:Arial;
-        text-align:center;
-      ">
-
-        <h1 style="
-          color:#ff2f7d;
-          font-size:90px;
-
-          text-shadow:
-          0 0 20px #ff66b3;
-        ">
-          YAYYYYY 💖
-        </h1>
-
-        <p style="
-          font-size:40px;
-          margin-top:20px;
-          color:white;
-
-          text-shadow:
-          0 0 10px black;
-        ">
-          Biết màaaa 😘
-        </p>
-
-      </div>
-
-      `;
-    });
-
-    // Tim bay
-    function createHeart(){
-
-      const heart =
-        document.createElement("div");
-
-      heart.classList.add("love");
-
-      heart.innerHTML = "💗";
-
-      heart.style.left =
-        Math.random() *
-window.innerWidth + "px";
-
-      heart.style.fontSize =
-        (20 + Math.random() * 35)
-        + "px";
-
-      heart.style.animationDuration =
-        (3 + Math.random() * 3)
-        + "s";
-
-      document.body.appendChild(heart);
-
-      setTimeout(() => {
-
-        heart.remove();
-
-      },6000);
-    }
-
-    setInterval(createHeart,250);
-
-  </script>
+    setTimeout(() => {
+      heart.remove();
+    }, 5000);
+  }
+</script>
 
 </body>
 </html>
