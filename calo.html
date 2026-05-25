@@ -1,159 +1,331 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Anh Nhớ Em ❤️</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thư Xin Lỗi Gửi Em ❤️</title>
 
   <style>
+
     *{
       margin:0;
       padding:0;
       box-sizing:border-box;
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
     }
 
     body{
-      overflow:hidden;
-      background: linear-gradient(135deg,#ff5f9e,#ff89c0,#ffc2de);
       height:100vh;
+      overflow:hidden;
+
       display:flex;
       justify-content:center;
       align-items:center;
+
+      background:
+      radial-gradient(circle at top,#ff9eb5,#ffdde1,#ffd6ec);
+
       position:relative;
     }
 
-    .main-btn{
-      padding:18px 40px;
-      font-size:24px;
-      border:none;
-      border-radius:20px;
-      background:white;
-      color:#ff2d75;
-      font-weight:bold;
-      cursor:pointer;
-      box-shadow:0 0 20px rgba(255,255,255,0.7);
-      transition:0.3s;
-      z-index:9999;
-    }
-
-    .main-btn:hover{
-      transform:scale(1.08);
-    }
-
-    .popup{
+    .stars{
       position:absolute;
-      width:220px;
-      height:120px;
+      width:100%;
+      height:100%;
+      overflow:hidden;
+    }
+
+    .star{
+      position:absolute;
+      width:4px;
+      height:4px;
+
       background:white;
-      border-radius:20px;
-      display:flex;
-      justify-content:center;
-      align-items:center;
+      border-radius:50%;
+
+      animation: twinkle 3s infinite;
+    }
+
+    @keyframes twinkle{
+      0%{
+        opacity:0.2;
+        transform:scale(1);
+      }
+
+      50%{
+        opacity:1;
+        transform:scale(2);
+      }
+
+      100%{
+        opacity:0.2;
+        transform:scale(1);
+      }
+    }
+
+    .card{
+
+      width:90%;
+      max-width:700px;
+
+      background:rgba(255,255,255,0.15);
+
+      backdrop-filter:blur(15px);
+
+      border:1px solid rgba(255,255,255,0.3);
+
+      border-radius:30px;
+
+      padding:50px;
+
+      text-align:center;
+
+      color:white;
+
+      box-shadow:0 0 40px rgba(0,0,0,0.15);
+
+      animation:float 4s ease-in-out infinite;
+
+      position:relative;
+      z-index:10;
+    }
+
+    @keyframes float{
+
+      0%{
+        transform:translateY(0px);
+      }
+
+      50%{
+        transform:translateY(-15px);
+      }
+
+      100%{
+        transform:translateY(0px);
+      }
+
+    }
+
+    h1{
+      font-size:50px;
+      margin-bottom:20px;
+
+      animation: glow 2s infinite alternate;
+    }
+
+    @keyframes glow{
+
+      from{
+        text-shadow:0 0 10px white;
+      }
+
+      to{
+        text-shadow:
+        0 0 20px #ff4f81,
+        0 0 40px #ff4f81;
+      }
+
+    }
+
+    .typing{
+      font-size:22px;
+      line-height:1.8;
+
+      min-height:230px;
+    }
+
+    .btn{
+      margin-top:30px;
+
+      padding:16px 35px;
+
+      border:none;
+      border-radius:50px;
+
+      background:white;
+
+      color:#ff4f81;
+
+      font-size:20px;
+      font-weight:bold;
+
+      cursor:pointer;
+
+      transition:0.4s;
+    }
+
+    .btn:hover{
+
+      transform:scale(1.1);
+
+      background:#ff4f81;
+      color:white;
+
+      box-shadow:0 0 20px #ff4f81;
+    }
+
+    #finalMessage{
+
+      margin-top:30px;
+
       font-size:28px;
       font-weight:bold;
-      color:#ff2d75;
-      box-shadow:0 0 20px rgba(0,0,0,0.25);
-      animation:showUp 0.4s ease;
-      user-select:none;
-    }
 
-    @keyframes showUp{
-      0%{
-        transform:scale(0);
-        opacity:0;
-      }
-      100%{
-        transform:scale(1);
-        opacity:1;
-      }
+      opacity:0;
+
+      transition:1s;
     }
 
     .heart{
       position:absolute;
+
       color:white;
-      font-size:20px;
-      animation:fall linear infinite;
-      opacity:0.8;
+
+      animation:fly 6s linear infinite;
     }
 
-    @keyframes fall{
-      from{
-        transform:translateY(-100px);
+    @keyframes fly{
+
+      0%{
+        transform:translateY(100vh) scale(0);
+        opacity:0;
       }
-      to{
-        transform:translateY(110vh);
+
+      30%{
+        opacity:1;
       }
+
+      100%{
+        transform:translateY(-120vh) scale(1.5);
+        opacity:0;
+      }
+
     }
+
   </style>
 </head>
+
 <body>
 
-<button class="main-btn" onclick="startLove()">
-  Bấm Vào Đây ❤️
-</button>
+  <div class="stars"></div>
 
-<script>
-  let started = false;
+  <div class="card">
 
-  function startLove(){
-    if(started) return;
-    started = true;
+    <h1>Gửi Em... ❤️</h1>
 
-    const btn = document.querySelector(".main-btn");
-    btn.style.display = "none";
+    <div class="typing" id="typing"></div>
 
-    // Tạo popup liên tục
-    let count = 0;
+    <button class="btn" onclick="showLove()">
+      Đọc Điều Cuối Cùng...
+    </button>
 
-    const interval = setInterval(() => {
+    <div id="finalMessage">
+      Anh thật sự không muốn mất em... 💖
+    </div>
 
-      const box = document.createElement("div");
-      box.className = "popup";
-      box.innerText = "ANH NHỚ EM ❤️";
+  </div>
 
-      // random vị trí
-      const x = Math.random() * (window.innerWidth - 220);
-      const y = Math.random() * (window.innerHeight - 120);
+  <script>
 
-      box.style.left = x + "px";
-      box.style.top = y + "px";
+    const text = `
+Anh biết có những lúc em cảm thấy cô đơn
+ngay cả khi anh vẫn ở bên cạnh...
 
-      // random xoay nhẹ
-      const rotate = (Math.random() * 20) - 10;
-      box.style.transform = `rotate(${rotate}deg)`;
+Vì anh đã chưa đủ tinh tế,
+chưa đủ để ý tới cảm xúc của em.
 
-      document.body.appendChild(box);
+Có thể anh không giỏi thể hiện,
+nhưng chưa giây phút nào
+anh xem nhẹ em cả.
 
-      count++;
+Nếu được...
+anh muốn bù đắp mọi thứ cho em từ đầu ❤️
+`;
 
-      // chàn ngập màn hình
-      if(count > 120){
-        clearInterval(interval);
+    let index = 0;
+
+    function typeEffect(){
+
+      if(index < text.length){
+
+        document.getElementById("typing").innerHTML +=
+        text.charAt(index);
+
+        index++;
+
+        setTimeout(typeEffect,40);
       }
 
-    }, 120);
+    }
 
-    // tạo tim rơi
-    setInterval(createHeart, 120);
-  }
+    typeEffect();
 
-  function createHeart(){
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = "❤️";
+    function showLove(){
 
-    heart.style.left = Math.random() * window.innerWidth + "px";
-    heart.style.fontSize = (Math.random() * 25 + 15) + "px";
-    heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
+      const msg =
+      document.getElementById("finalMessage");
 
-    document.body.appendChild(heart);
+      msg.style.opacity = "1";
 
-    setTimeout(() => {
-      heart.remove();
-    }, 5000);
-  }
-</script>
+    }
+
+    function createHeart(){
+
+      const heart =
+      document.createElement("div");
+
+      heart.classList.add("heart");
+
+      heart.innerHTML = "💖";
+
+      heart.style.left =
+      Math.random() * 100 + "vw";
+
+      heart.style.fontSize =
+      Math.random() * 25 + 15 + "px";
+
+      heart.style.animationDuration =
+      Math.random() * 3 + 4 + "s";
+
+      document.body.appendChild(heart);
+
+      setTimeout(()=>{
+        heart.remove();
+      },7000);
+
+    }
+
+    setInterval(createHeart,300);
+
+    function createStars(){
+
+      const stars =
+      document.querySelector(".stars");
+
+      for(let i=0;i<80;i++){
+
+        const star =
+        document.createElement("div");
+
+        star.classList.add("star");
+
+        star.style.left =
+        Math.random() * 100 + "%";
+
+        star.style.top =
+        Math.random() * 100 + "%";
+
+        star.style.animationDuration =
+        Math.random() * 3 + 2 + "s";
+
+        stars.appendChild(star);
+      }
+
+    }
+
+    createStars();
+
+  </script>
 
 </body>
 </html>
