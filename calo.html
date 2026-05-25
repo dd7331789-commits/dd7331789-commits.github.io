@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thư Xin Lỗi Gửi Em ❤️</title>
+  <title>Anh Xin Lỗi Em ❤️</title>
 
   <style>
 
@@ -11,7 +11,7 @@
       margin:0;
       padding:0;
       box-sizing:border-box;
-      font-family: 'Segoe UI', sans-serif;
+      font-family:Arial, sans-serif;
     }
 
     body{
@@ -22,184 +22,111 @@
       justify-content:center;
       align-items:center;
 
-      background:
-      radial-gradient(circle at top,#ff9eb5,#ffdde1,#ffd6ec);
+      background:linear-gradient(135deg,#ff9a9e,#fad0c4);
 
       position:relative;
     }
 
-    .stars{
-      position:absolute;
-      width:100%;
-      height:100%;
-      overflow:hidden;
-    }
-
-    .star{
-      position:absolute;
-      width:4px;
-      height:4px;
+    .container{
+      width:90%;
+      max-width:650px;
 
       background:white;
-      border-radius:50%;
 
-      animation: twinkle 3s infinite;
-    }
+      padding:40px;
 
-    @keyframes twinkle{
-      0%{
-        opacity:0.2;
-        transform:scale(1);
-      }
-
-      50%{
-        opacity:1;
-        transform:scale(2);
-      }
-
-      100%{
-        opacity:0.2;
-        transform:scale(1);
-      }
-    }
-
-    .card{
-
-      width:90%;
-      max-width:700px;
-
-      background:rgba(255,255,255,0.15);
-
-      backdrop-filter:blur(15px);
-
-      border:1px solid rgba(255,255,255,0.3);
-
-      border-radius:30px;
-
-      padding:50px;
+      border-radius:25px;
 
       text-align:center;
 
-      color:white;
+      box-shadow:0 0 30px rgba(0,0,0,0.2);
 
-      box-shadow:0 0 40px rgba(0,0,0,0.15);
-
-      animation:float 4s ease-in-out infinite;
-
-      position:relative;
       z-index:10;
-    }
 
-    @keyframes float{
-
-      0%{
-        transform:translateY(0px);
-      }
-
-      50%{
-        transform:translateY(-15px);
-      }
-
-      100%{
-        transform:translateY(0px);
-      }
-
+      animation:fadeIn 1.5s ease;
     }
 
     h1{
-      font-size:50px;
+      color:#ff3366;
+      font-size:45px;
       margin-bottom:20px;
-
-      animation: glow 2s infinite alternate;
     }
 
-    @keyframes glow{
-
-      from{
-        text-shadow:0 0 10px white;
-      }
-
-      to{
-        text-shadow:
-        0 0 20px #ff4f81,
-        0 0 40px #ff4f81;
-      }
-
-    }
-
-    .typing{
-      font-size:22px;
+    .text{
+      font-size:20px;
       line-height:1.8;
-
-      min-height:230px;
+      color:#444;
     }
 
-    .btn{
+    .highlight{
+      color:#ff3366;
+      font-weight:bold;
+      font-size:25px;
+    }
+
+    button{
       margin-top:30px;
 
-      padding:16px 35px;
+      padding:15px 35px;
 
       border:none;
       border-radius:50px;
 
-      background:white;
-
-      color:#ff4f81;
+      background:#ff3366;
+      color:white;
 
       font-size:20px;
-      font-weight:bold;
 
       cursor:pointer;
 
-      transition:0.4s;
+      transition:0.3s;
     }
 
-    .btn:hover{
-
+    button:hover{
       transform:scale(1.1);
-
-      background:#ff4f81;
-      color:white;
-
-      box-shadow:0 0 20px #ff4f81;
+      background:#ff174f;
     }
 
-    #finalMessage{
-
+    #message{
       margin-top:30px;
 
-      font-size:28px;
+      font-size:25px;
+
+      color:red;
+
       font-weight:bold;
-
-      opacity:0;
-
-      transition:1s;
     }
 
     .heart{
       position:absolute;
+      color:red;
+      font-size:20px;
 
-      color:white;
-
-      animation:fly 6s linear infinite;
+      animation:fall linear infinite;
     }
 
-    @keyframes fly{
-
+    @keyframes fall{
       0%{
-        transform:translateY(100vh) scale(0);
-        opacity:0;
-      }
-
-      30%{
+        transform:translateY(-100px);
         opacity:1;
       }
 
       100%{
-        transform:translateY(-120vh) scale(1.5);
+        transform:translateY(110vh);
         opacity:0;
       }
+    }
 
+    @keyframes fadeIn{
+      from{
+        opacity:0;
+        transform:translateY(40px);
+      }
+
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
     }
 
   </style>
@@ -207,123 +134,68 @@
 
 <body>
 
-  <div class="stars"></div>
+  <div class="container">
 
-  <div class="card">
+    <h1>Anh Xin Lỗi Em 💔</h1>
 
-    <h1>Gửi Em... ❤️</h1>
+    <div class="text">
+      Anh biết thời gian vừa rồi anh đã quá vô tâm...
+      <br><br>
 
-    <div class="typing" id="typing"></div>
+      Không để ý cảm xúc của em,
+      không quan tâm em đủ nhiều như em cần.
+      <br><br>
 
-    <button class="btn" onclick="showLove()">
-      Đọc Điều Cuối Cùng...
+      Nhưng thật lòng...
+      chưa bao giờ anh muốn làm em buồn cả.
+      <br><br>
+
+      <span class="highlight">
+        Anh thương em rất nhiều ❤️
+      </span>
+    </div>
+
+    <button onclick="showMessage()">
+      Tha lỗi cho anh nha 🥺
     </button>
 
-    <div id="finalMessage">
-      Anh thật sự không muốn mất em... 💖
-    </div>
+    <div id="message"></div>
 
   </div>
 
   <script>
 
-    const text = `
-Anh biết có những lúc em cảm thấy cô đơn
-ngay cả khi anh vẫn ở bên cạnh...
+    function showMessage(){
 
-Vì anh đã chưa đủ tinh tế,
-chưa đủ để ý tới cảm xúc của em.
-
-Có thể anh không giỏi thể hiện,
-nhưng chưa giây phút nào
-anh xem nhẹ em cả.
-
-Nếu được...
-anh muốn bù đắp mọi thứ cho em từ đầu ❤️
-`;
-
-    let index = 0;
-
-    function typeEffect(){
-
-      if(index < text.length){
-
-        document.getElementById("typing").innerHTML +=
-        text.charAt(index);
-
-        index++;
-
-        setTimeout(typeEffect,40);
-      }
-
-    }
-
-    typeEffect();
-
-    function showLove(){
-
-      const msg =
-      document.getElementById("finalMessage");
-
-      msg.style.opacity = "1";
+      document.getElementById("message").innerHTML =
+      "Anh hứa sẽ quan tâm em nhiều hơn nữa ❤️";
 
     }
 
     function createHeart(){
 
-      const heart =
-      document.createElement("div");
+      const heart = document.createElement("div");
 
       heart.classList.add("heart");
 
-      heart.innerHTML = "💖";
+      heart.innerHTML = "❤️";
 
-      heart.style.left =
-      Math.random() * 100 + "vw";
+      heart.style.left = Math.random() * 100 + "vw";
 
       heart.style.fontSize =
-      Math.random() * 25 + 15 + "px";
+      Math.random() * 20 + 15 + "px";
 
       heart.style.animationDuration =
-      Math.random() * 3 + 4 + "s";
+      Math.random() * 3 + 2 + "s";
 
       document.body.appendChild(heart);
 
       setTimeout(()=>{
         heart.remove();
-      },7000);
-
+      },5000);
     }
 
     setInterval(createHeart,300);
-
-    function createStars(){
-
-      const stars =
-      document.querySelector(".stars");
-
-      for(let i=0;i<80;i++){
-
-        const star =
-        document.createElement("div");
-
-        star.classList.add("star");
-
-        star.style.left =
-        Math.random() * 100 + "%";
-
-        star.style.top =
-        Math.random() * 100 + "%";
-
-        star.style.animationDuration =
-        Math.random() * 3 + 2 + "s";
-
-        stars.appendChild(star);
-      }
-
-    }
-
-    createStars();
 
   </script>
 
