@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Grades</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="lib/jquery.min.js"></script>
+    <script src="js/main.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h2>Nhập Điểm</h2>
+            <form id="gradeForm">
+                <label for="subject">Tên Môn:</label>
+                <input type="text" id="subject" required>
+
+                <label for="coefficient">Hệ Số:</label>
+                <input type="number" id="coefficient" required min="1">
+
+                <label for="score">Điểm Thi:</label>
+                <input type="number" id="score" required min="0" max="10">
+
+                <button type="submit" id="submitBtn">Nhập Điểm</button>
+            </form>
+        </div>
+        <div class="table-container">
+            <h2>Danh Sách Điểm</h2>
+            <table id="gradesTable">
+                <thead>
+                    <tr>
+                        <th>Tên Môn</th>
+                        <th>Hệ Số</th>
+                        <th>Điểm Thi</th>
+                        <th>Hành Động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dữ liệu sẽ được thêm vào đây -->
+                </tbody>
+            </table>
+            <div id="averageScore">
+                <!-- Điểm trung bình sẽ được hiển thị ở đây -->
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>Người thực hiện: [Họ tên sinh viên] - [Mã sinh viên]</p>
+    </footer>
+</body>
+</html>
